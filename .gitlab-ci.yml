@@ -1,8 +1,11 @@
-build site:
+stages:
+  - build
+  - test
+  - deploy
+
+build:
   image: node:9
   stage: build
-  tags:
-    - node
   script:
     - yarn install --progress=false
     - yarn run build
@@ -13,14 +16,12 @@ build site:
   only:
     - master
 
-unit test:
+test:
   image: node:9
   stage: test
-  tags:
-    - node
   script:
     - yarn install --progress=false
-    - yarn run unit
+    - yarn run test
   only:
     - master
 
