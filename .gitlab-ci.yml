@@ -1,6 +1,8 @@
 build site:
   image: node:9
   stage: build
+  tags:
+    - node
   script:
     - yarn install --progress=false
     - yarn run build
@@ -14,6 +16,8 @@ build site:
 unit test:
   image: node:9
   stage: test
+  tags:
+    - node
   script:
     - yarn install --progress=false
     - yarn run unit
@@ -23,6 +27,8 @@ unit test:
 deploy:
   image: alpine
   stage: deploy
+  tags:
+    - docker
   script:
     - apk add --no-cache rsync openssh
     - mkdir -p ~/.ssh
