@@ -1,8 +1,6 @@
 build site:
   image: node:9
   stage: build
-  tags: 
-    - node
   script:
     - yarn install --progress=false
     - yarn run build
@@ -11,26 +9,20 @@ build site:
     paths:
       - dist
   only:
-    - tags
     - master@gitlab-org/gitlab-ce
 
 unit test:
   image: node:9
   stage: test
-  tags:
-    - node
   script:
     - yarn install --progress=false
     - yarn run unit
   only:
-    - tags
     - master@gitlab-org/gitlab-ce
 
 deploy:
   image: alpine
   stage: deploy
-  tags: 
-    - alpine
   script:
     - apk add --no-cache rsync openssh
     - mkdir -p ~/.ssh
@@ -39,5 +31,4 @@ deploy:
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
     - rsync -rav --delete dist/ user@server.com:/your/project/path/
   only:
-    - tags
     - master@gitlab-org/gitlab-ce
