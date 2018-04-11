@@ -9,7 +9,7 @@ build site:
     paths:
       - dist
   only:
-    - master@gitlab-org/gitlab-ce
+    - master
 
 unit test:
   image: node:9
@@ -18,7 +18,7 @@ unit test:
     - yarn install --progress=false
     - yarn run unit
   only:
-    - master@gitlab-org/gitlab-ce
+    - master
 
 deploy:
   image: alpine
@@ -31,4 +31,4 @@ deploy:
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
     - rsync -rav --delete dist/ user@server.com:/your/project/path/
   only:
-    - master@gitlab-org/gitlab-ce
+    - master
