@@ -25,7 +25,7 @@ test:
   only:
     - master
 
-deploy:
+staging deploy:
   image: alpine
   stage: deploy
   tags:
@@ -37,5 +37,26 @@ deploy:
     - chmod 600 ~/.ssh/id_dsa
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
     - rsync -rav --delete dist/ user@server.com:/your/project/path/
+  environment:
+    name: staging
+    url: "https://dev.itcamp.in.th/14/"
+  only:
+    - master
+
+production deploy:
+  image: alpine
+  stage: deploy
+  tags:
+    - docker
+  script:
+    - apk add --no-cache rsync openssh
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" >> ~/.ssh/id_dsa
+    - chmod 600 ~/.ssh/id_dsa
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    - rsync -rav --delete dist/ user@server.com:/your/project/path/
+  environment:
+    name: production
+    url: "htt"
   only:
     - master

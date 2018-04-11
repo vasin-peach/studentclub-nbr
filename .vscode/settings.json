@@ -1,6 +1,6 @@
 {
   // If true, will use single instead of double quotes
-  "prettier.singleQuote": false,
+  "prettier.singleQuote": true,
 
   // Number of spaces it should use per tab
   "prettier.tabWidth": 2,
@@ -41,5 +41,10 @@
   },
 
   // Format a file on save. A formatter must be available, the file must not be auto-saved, and editor must not be shutting down.
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+
+  // Defines space handling before function argument parentheses. Requires TypeScript >= 2.1.5.
+  "typescript.format.insertSpaceBeforeFunctionParenthesis": true,
+  "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+  "editor.formatOnType": true
 }
