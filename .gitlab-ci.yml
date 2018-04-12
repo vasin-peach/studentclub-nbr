@@ -23,7 +23,7 @@ build:
     - master
 
 staging-deploy:
-image: registry.gitlab.com/itcamp-itkmitl/devops/remote-itcamp-docker
+  image: registry.gitlab.com/itcamp-itkmitl/devops/remote-itcamp-docker
   stage: deploy
   script: 
     - echo 'staging deploy'
