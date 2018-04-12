@@ -1,34 +1,39 @@
-image: node:9
-
 cache: 
   paths:
     - node_nodules/
 
 stages:
   - build
-  - staging
-  - production
+  - deploy
+
+before_script: 
+  - docker login registry.gitlab.com -u $GITLAB_USER -p $GITLAB_PASS
 
 build:
   stage: build
+  image: docker:latest
+  services:
+    - docker:dind
   script:
-    - echo start building...
-    - yarn install --progress=false
-    - yarn run build
+    - docker build -t registry.gitlab.com/shinasaki/studentclub-nbr .
+    - docker push registry.gitlab.com/shinasaki/studentclub-nbr
+  after_script:
+    - docker image rm registry.gitlab.com/shinasaki/studentclub-nbr
   only:
     - master
 
-staging:
-  stage: staging
+staging-deploy:
+image: registry.gitlab.com/itcamp-itkmitl/devops/remote-itcamp-docker
+  stage: deploy
   script: 
-    - rsync -av --delete public /srv/nginx/pages/$CI_BUILD_REF_SLU
+    - echo 'staging deploy'
   environment:
     name: staging
     url: http://$APPS_DOMAIN
   only:
     - master
 
-production:
+production-deploy:
   stage: production
   script:
     - rsync -av --delete public /srv/nginx/pages/$CI_BUILD_REF_SLU
@@ -38,3 +43,4 @@ production:
   when: manual
   only:
     - master
+  when: manual
