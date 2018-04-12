@@ -34,7 +34,7 @@ staging-deploy:
     - master
 
 production-deploy:
-  stage: production
+  stage: deploy
   script:
     - rsync -av --delete public /srv/nginx/pages/$CI_BUILD_REF_SLU
   environment:
