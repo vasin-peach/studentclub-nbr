@@ -7,7 +7,7 @@ stages:
   - deploy
 
 before_script: 
-  - docker login registry.gitlab.com -u $GITLAB_USER -p $GITLAB_PASS
+  - "docker login registry.gitlab.com -u $GITLAB_USER -p $GITLAB_PASS"
 
 build:
   stage: build
@@ -15,8 +15,8 @@ build:
   services:
     - docker:dind
   script:
-    - docker build -t registry.gitlab.com/shinasaki/studentclub-nbr .
-    - docker push registry.gitlab.com/shinasaki/studentclub-nbr
+    - "docker build -t registry.gitlab.com/shinasaki/studentclub-nbr ."
+    - "docker push registry.gitlab.com/shinasaki/studentclub-nbr"
   only:
     - master
 
