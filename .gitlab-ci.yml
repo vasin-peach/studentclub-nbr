@@ -19,7 +19,7 @@ build:
 staging-deploy:
   stage: deploy
   script: 
-    - rsync -av --delete dist /srv/nginx/pages/staging
+    - rsync -hrvz --delete dist/ /srv/nginx/pages/staging
   environment:
     name: staging
     url: http://$APPS_DOMAIN
@@ -29,7 +29,7 @@ staging-deploy:
 production-deploy:
   stage: deploy
   script:
-    - rsync -av --delete public /srv/nginx/pages/production
+    - rsync -av --delete dist/ /srv/nginx/pages/production
   environment:
     name: production
     url: http://production.$APPS_DOMAIN
