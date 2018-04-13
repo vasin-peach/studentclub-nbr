@@ -7,11 +7,10 @@ stages:
   - deploy
 
 before_script:
-  - docker login registry.gitlab.com -u Shinasaki -p 0818015191
+  - docker login registry.gitlab.com --username $GITLAB_USER --password $GITLAB_PASS
 
 build:
   stage: build
-  image: docker:latest
   services:
     - docker:dind
   script:
@@ -19,6 +18,7 @@ build:
     - docker push registry.gitlab.com/shinasaki/studentclub-nbr
   after_script:
     - docker rmi registry.gitlab.com/shinasaki/studentclub-nbr
+    - docker logout registry.gitlab.com
   only:
     - master
 
