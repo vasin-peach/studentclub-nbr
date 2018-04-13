@@ -7,7 +7,7 @@ stages:
   - deploy
 
 before_script:
-  - docker login registry.gitlab.com -u $GITLAB_USER -p $GITLAB_PASS
+  - docker login registry.gitlab.com -u Shinasaki -p 0818015191
 
 build:
   stage: build
