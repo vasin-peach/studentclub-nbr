@@ -7,7 +7,8 @@ stages:
   - deploy
 
 before_script:
-  - "docker login registry.gitlab.com -u $GITLAB_USER -p $GITLAB_PASS"
+  - sudo -s
+  - docker login registry.gitlab.com -u $GITLAB_USER -p $GITLAB_PASS
 
 build:
   stage: build
