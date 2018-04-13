@@ -16,7 +16,6 @@ build:
     - docker push registry.gitlab.com/shinasaki/studentclub-nbr
   after_script:
     - docker rmi registry.gitlab.com/shinasaki/studentclub-nbr
-    - docker logout registry.gitlab.com
   only:
     - master
 
@@ -32,6 +31,8 @@ staging-deploy:
     - "docker-compose -f .cdconfig/docker-compose.staging.yml stop"
     - "docker-compose -f .cdconfig/docker-compose.staging.yml rm --force"
     - "docker-compose -f .cdconfig/docker-compose.staging.yml up -d"
+  after_scrit:
+    - docker logout registry.gitlab.com
     
   environment:
     name: staging
@@ -41,12 +42,16 @@ staging-deploy:
 
 production-deploy:
   stage: deploy
+  before_script:
+    - apk add --no-cache py-pip
+    - pip install docker-compose
   script: 
     - "docker-compose -f .cdconfig/docker-compose.prod.yml pull"
     - "docker-compose -f .cdconfig/docker-compose.prod.yml stop"
     - "docker-compose -f .cdconfig/docker-compose.prod.yml rm --force"
     - "docker-compose -f .cdconfig/docker-compose.prod.yml up -d"
-    
+  after_scrit:
+    - docker logout registry.gitlab.com
   environment:
     name: staging
     url: http://$APPS_DOMAIN
