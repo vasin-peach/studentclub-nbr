@@ -20,6 +20,7 @@ staging-deploy:
   stage: deploy
   script: 
     - rsync -hrvz --delete dist/ /srv/nginx/pages/staging
+    - echo $PATH
   environment:
     name: staging
     url: http://$APPS_DOMAIN
