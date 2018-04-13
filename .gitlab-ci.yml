@@ -22,6 +22,11 @@ build:
 
 staging-deploy:
   stage: deploy
+  services:
+    - docker:dind
+  before_script:
+    - apk add --no-cache py-pip
+    - pip install docker-compose
   script: 
     - "docker-compose -f .cdconfig/docker-compose.staging.yml pull"
     - "docker-compose -f .cdconfig/docker-compose.staging.yml stop"
