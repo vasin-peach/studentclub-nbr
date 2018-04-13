@@ -7,19 +7,17 @@ stages:
   - deploy
 
 before_script:
-  - sudo -s
   - docker login registry.gitlab.com -u $GITLAB_USER -p $GITLAB_PASS
 
 build:
   stage: build
-  image: docker:latest
   services:
     - docker:dind
   script:
     - docker build -t registry.gitlab.com/shinasaki/studentclub-nbr .
     - docker push registry.gitlab.com/shinasaki/studentclub-nbr
   after_script:
-    - docker image rm registry.gitlab.com/shinasaki/studentclub-nbr
+    - docker rmi registry.gitlab.com/shinasaki/studentclub-nbr
   only:
     - master
 

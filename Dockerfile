@@ -1,8 +1,11 @@
+# Use node 8
 FROM node:8
 
+# Set the working directory to /app
 WORKDIR /home/node/app
 COPY . ./
-WORKDIR /home/node/app/client
+WORKDIR /home/node/app
 
+# Install package and build
 RUN yarn install
 RUN yarn build
