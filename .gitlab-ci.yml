@@ -1,5 +1,3 @@
-image: node:latest
-
 cache: 
   paths:
     - node_modules/
@@ -8,34 +6,42 @@ stages:
   - build
   - deploy
 
+before_script:
+  - "docker login registry.gitlab.com -u $GITLAB_USER -p $GITLAB_PASS"
+
 build:
   stage: build
+  image: docker:latest
+  services:
+    - docker:dind
   script:
-    - yarn
-    - yarn run build
+    - docker build -t registry.gitlab.com/shinasaki/studentclub-nbr .
+    - docker push registry.gitlab.com/shinasaki/studentclub-nbr
+  after_script:
+    - docker image rm registry.gitlab.com/shinasaki/studentclub-nbr
   only:
     - master
 
-staging-deploy:
-  stage: deploy
-  script: 
-    - echo $PATH
-    - rsync -hrvz --delete dist/ /srv/nginx/pages/staging
+# staging-deploy:
+#   stage: deploy
+#   script: 
+#     - echo $PATH
+#     - rsync -hrvz --delete dist/ /srv/nginx/pages/staging
     
-  environment:
-    name: staging
-    url: http://$APPS_DOMAIN
-  only:
-    - master
+#   environment:
+#     name: staging
+#     url: http://$APPS_DOMAIN
+#   only:
+#     - master
 
-production-deploy:
-  stage: deploy
-  script:
-    - rsync -av --delete dist/ /srv/nginx/pages/production
-  environment:
-    name: production
-    url: http://production.$APPS_DOMAIN
-  when: manual
-  only:
-    - master
-  when: manual
+# production-deploy:
+#   stage: deploy
+#   script:
+#     - rsync -av --delete dist/ /srv/nginx/pages/production
+#   environment:
+#     name: production
+#     url: http://production.$APPS_DOMAIN
+#   when: manual
+#   only:
+#     - master
+#   when: manual
