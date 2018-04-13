@@ -31,7 +31,7 @@ staging-deploy:
     - "docker-compose -f .cdconfig/docker-compose.staging.yml stop"
     - "docker-compose -f .cdconfig/docker-compose.staging.yml rm --force"
     - "docker-compose -f .cdconfig/docker-compose.staging.yml up -d"
-  after_scrit:
+  after_script:
     - docker logout registry.gitlab.com
     
   environment:
@@ -50,7 +50,7 @@ production-deploy:
     - "docker-compose -f .cdconfig/docker-compose.prod.yml stop"
     - "docker-compose -f .cdconfig/docker-compose.prod.yml rm --force"
     - "docker-compose -f .cdconfig/docker-compose.prod.yml up -d"
-  after_scrit:
+  after_script:
     - docker logout registry.gitlab.com
   environment:
     name: staging
