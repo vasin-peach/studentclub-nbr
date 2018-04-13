@@ -3,7 +3,7 @@ stages:
   - deploy
 
 before_script:
-  - docker login registry.gitlab.com -u $GITLAB_USER -p $GITLAB_PASS
+  - docker login registry.gitlab.com --username $GITLAB_USER --password $GITLAB_PASS
 
 build:
   stage: build

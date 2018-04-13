@@ -1,6 +1,6 @@
 version: '3'
 
-servies:
+services:
   studentclub-nbr-staging:
     image: registry.gitlab.com/shinasaki/studentclub-nbr
     container_name: studentclub-nbr-staging
