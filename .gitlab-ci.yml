@@ -4,7 +4,12 @@ stages:
 
 before_script:
   - docker login registry.gitlab.com --username $GITLAB_USER --password $GITLAB_PASS
-
+  - apt update
+  - apt add python python-dev py-pip build-base
+  - curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+  - chmod +x /usr/local/bin/docker-compose
+  - pip install docker-compose
+  
 build:
   stage: build
   services:
