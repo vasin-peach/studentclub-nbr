@@ -1,0 +1,9 @@
+version: '3'
+
+servies:
+  studentclub-nbr-staging:
+    image: registry.gitlab.com/shinasaki/studentclub-nbr
+    container_name: studentclub-nbr-staging
+    restart: always
+    environment:
+      - NODE_ENV=stagin
