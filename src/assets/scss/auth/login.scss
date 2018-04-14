@@ -1,0 +1,158 @@
+#app-login {
+  width: 100vw;
+  min-height: 100vh;
+
+  @include center;
+
+  @include mobile {
+    background: url('/static/imgs/bg-768.png');
+    background-size: cover;
+    background-position: center;
+  }
+  @include tablet {
+    background: url('/static/imgs/bg-1280.png');
+    background-size: cover;
+    background-position: center;
+  }
+  @include desktop {
+    background: url('/static/imgs/bg-1920.png');
+    background-size: cover;
+    background-position: center;
+  }
+
+  .wrapper {
+    background-color: $color-white;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 20px 50px rgba($color-dark, $alpha: 0.5);
+    text-align: center;
+
+    @include mobile {
+      padding: 20px;
+      width: 95vw;
+      height: 97vh;
+    }
+
+    @include tablet {
+      padding: 25px;
+      width: 65vw;
+      height: 85vh;
+    }
+
+    @include desktop {
+      width: 30vw;
+      height: 90vh;
+    }
+
+    .box-header {
+      img {
+        height: 12vh;
+        box-shadow: 0 0 0 5px rgba($color-red, $alpha: 0.4);
+        transition: box-shadow 0.3s ease;
+        border-radius: 50%;
+
+        &:hover {
+          box-shadow: 0 0 0 10px rgba($color-red, $alpha: 0.3);
+        }
+      }
+
+      span {
+        display: block;
+        color: $color-base-bold;
+
+        &:first-of-type {
+          font-size: 25px;
+          font-weight: bold;
+          margin-top: 20px;
+        }
+
+        &:last-of-type {
+          font-size: 15px;
+          font-weight: lighter;
+        }
+      }
+    }
+
+    .box-body {
+      margin-top: 7vh;
+      form {
+        width: 100%;
+
+        .input-group {
+          display: flex;
+          justify-content: center;
+        }
+
+        .input-container {
+          width: 25vw;
+
+          span {
+            display: block;
+            text-align: left;
+            font-size: 15px;
+            margin-left: 15px;
+            font-weight: lighter;
+            color: rgba($color-base, $alpha: 0.7);
+          }
+          p {
+            margin: 0;
+            margin: 4px 0;
+            display: block;
+            text-align: left;
+            font-size: 13px;
+            margin-left: 15px;
+            color: $color-danger;
+          }
+        }
+        input {
+          width: 100%;
+          padding: 7px 14px;
+          // border-radius: 30px;
+          border: 2px $color-gray-bold;
+          border-style: none none solid none !important;
+
+          &:focus {
+            outline: none;
+          }
+        }
+      }
+    }
+
+    .box-footer {
+      margin-top: 5vh;
+      button {
+        cursor: pointer;
+        min-width: 18vw;
+        letter-spacing: 2px;
+        font-weight: bold;
+        border: none;
+        padding: 15px 15px;
+        background-color: $color-white;
+        border-radius: 30px;
+        box-shadow: 0 0 15px 0 rgba($color-gray, $alpha: 0.5);
+        transition: color 0.3s ease, box-shadow 0.3s ease;
+        i {
+          color: $color-red;
+          transition: color 0.3s ease;
+        }
+        &:hover {
+          i {
+            color: rgba($color-red, $alpha: 0.8);
+          }
+          color: rgba($color-base, $alpha: 0.8);
+          background-color: #fcfcfc;
+          box-shadow: 0 0 10px 1px rgba($color-gray, $alpha: 0.7);
+        }
+        &:focus {
+          i {
+            color: rgba($color-red, $alpha: 0.7);
+          }
+          color: rgba($color-base, $alpha: 0.8);
+          outline: none;
+          background-color: #fcfcfc;
+          box-shadow: 0 0 2px 1px rgba($color-gray, $alpha: 0.4);
+        }
+      }
+    }
+  }
+}

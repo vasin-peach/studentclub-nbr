@@ -1,0 +1,20 @@
+$focus-size: 3px;
+$focus-opacity: 0.3;
+
+input {
+  color: $color-base;
+  &::placeholder {
+    color: rgba($color-base, $alpha: 0.7);
+  }
+}
+.is-danger {
+  border: 2px solid $color-danger !important;
+  transition: border 0.3s ease;
+  color: $color-danger;
+}
+
+.is-success {
+  border: 2px solid $color-success !important;
+  transition: border 0.3s ease;
+  color: $color-success;
+}
