@@ -1,12 +1,12 @@
 <template>
-  <div id="app">
-    <router-view/>
+  <div class="app-auth">
+    Auth
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'auth'
 };
 </script>
 
