@@ -25,5 +25,5 @@ export default new Vuex.Store({
     auth,
     loading
   },
-  strict: debug
+  strict: false
 });

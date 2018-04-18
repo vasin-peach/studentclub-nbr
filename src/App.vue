@@ -5,8 +5,15 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
-  name: 'App'
+  name: 'App',
+  mounted() {
+    this.session();
+  },
+  methods: {
+    ...mapActions(['session'])
+  }
 };
 </script>
 

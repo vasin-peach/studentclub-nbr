@@ -1,14 +1,71 @@
 import axios from 'axios';
 import swal from 'sweetalert2';
+import jwtDecode from 'jwt-decode';
+
+// enable axios set cookie
+axios.defaults.withCredentials = true;
 
 // initial state
-const state = {};
+const state = {
+  user: {
+    studentId: null,
+    token: null,
+    permission: null
+  }
+};
 
 // getters
-const getters = {};
+const getters = {
+  getUser: state => state.user
+};
+
+// mutations
+const mutations = {
+  // Update User Data
+  updateUserState(state, token) {
+    if (token) {
+      const userState = jwtDecode(token);
+      state.user.token = token;
+      state.user.studentId = userState.studentId;
+      state.user.permission = userState.permission;
+    }
+  },
+  saveToken(state, token) {}
+};
 
 // actions
 const actions = {
+  // Get Token Session //
+  session({ commit }) {
+    // loading
+    commit('fullLoadingChange', true);
+    // create request config
+    let config = {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 0
+    };
+
+    //create request
+    axios
+      .get(
+        window.location.protocol +
+          '//' +
+          window.location.host.split(':')[0] +
+          ':3000/api/session',
+        config
+      )
+      // request success
+      .then(response => {
+        if (response.status == 200) {
+          commit('updateUserState', response.data.token);
+          commit('fullLoadingChange', false);
+        }
+      });
+  },
+
+  // User Login //
   login({ commit }, data) {
     commit('fullLoadingChange', true);
 
@@ -26,7 +83,7 @@ const actions = {
         window.location.protocol +
           '//' +
           window.location.host.split(':')[0] +
-          ':3000/api/token',
+          ':3000/api/auth/token',
         data,
         config
       )
@@ -40,6 +97,9 @@ const actions = {
             timer: 3000
           });
         }
+        commit('updateUserState', response.data.token);
+        commit('fullLoadingChange', false);
+        return;
       })
 
       // login failed
@@ -73,10 +133,8 @@ const actions = {
   }
 };
 
-// mutations
-const mutations = {};
-
 // export
+
 export default {
   state,
   getters,

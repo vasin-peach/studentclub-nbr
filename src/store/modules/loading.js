@@ -12,9 +12,11 @@ const mutations = {
     if (state.loading.full) {
       setTimeout(() => {
         state.loading.full = value;
+        console.log(value);
       }, 1000);
     } else {
       state.loading.full = value;
+      console.log(value);
     }
   },
   halfLoadingChange(state, value) {
@@ -29,7 +31,9 @@ const mutations = {
 };
 
 // getters
-const getters = {};
+const getters = {
+  getLoading: state => state.loading
+};
 
 // export
 export default {
