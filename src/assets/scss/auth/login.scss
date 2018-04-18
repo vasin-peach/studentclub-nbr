@@ -28,23 +28,24 @@
     text-align: center;
 
     @include mobile {
+      margin: 1.5vh 0;
       padding: 20px;
       width: 95vw;
-      height: 97vh;
+      min-height: 97vh;
     }
 
     @include tablet {
       padding: 25px;
-      width: 65vw;
-      height: 85vh;
+      width: 80vw;
     }
 
     @include desktop {
-      width: 30vw;
-      height: 90vh;
+      width: 35vw;
+      min-height: 90vh;
     }
 
     .box-header {
+      margin-top: 5vh;
       img {
         height: 12vh;
         box-shadow: 0 0 0 5px rgba($color-red, $alpha: 0.4);
@@ -74,7 +75,7 @@
     }
 
     .box-body {
-      margin-top: 7vh;
+      margin-top: 10vh;
       form {
         width: 100%;
 
@@ -84,7 +85,17 @@
         }
 
         .input-container {
-          width: 25vw;
+          @include mobile {
+            width: 80vw;
+          }
+
+          @include tablet {
+            width: 60vw;
+          }
+
+          @include desktop {
+            width: 25vw;
+          }
 
           span {
             display: block;
@@ -107,7 +118,6 @@
         input {
           width: 100%;
           padding: 7px 14px;
-          // border-radius: 30px;
           border: 2px $color-gray-bold;
           border-style: none none solid none !important;
 
@@ -121,12 +131,24 @@
     .box-footer {
       margin-top: 5vh;
       button {
+        @include mobile {
+          min-width: 80vw;
+          padding: 15px 15px;
+        }
+
+        @include tablet {
+          min-width: 40vw;
+          padding: 15px 15px;
+        }
+
+        @include desktop {
+          min-width: 18vw;
+          padding: 15px 15px;
+        }
         cursor: pointer;
-        min-width: 18vw;
         letter-spacing: 2px;
         font-weight: bold;
         border: none;
-        padding: 15px 15px;
         background-color: $color-white;
         border-radius: 30px;
         box-shadow: 0 0 15px 0 rgba($color-gray, $alpha: 0.5);

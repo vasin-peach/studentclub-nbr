@@ -18,3 +18,7 @@ input {
   transition: border 0.3s ease;
   color: $color-success;
 }
+
+.button-danger {
+  box-shadow: 0 0 15px 0 rgba($color-red, $alpha: 0.5) !important;
+}

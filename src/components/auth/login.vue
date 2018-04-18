@@ -12,8 +12,9 @@
         </div>
         <!-- body -->
         <div class="box-body row">
-          <b-form>
-            <!-- input -->
+          <b-form @submit.prevent="validateBeforeSubmit">
+
+            <!-- input username -->
             <b-form-group id="usernameGroup" class="input-group" label-for="username">
               <div class="input-container">
                 <span class="input-label">
@@ -23,6 +24,7 @@
               </div>
             </b-form-group>
 
+            <!-- input password -->
             <b-form-group id="passwordGroup" class="input-group" label-for="password">
               <div class="input-container">
                 <span class="input-label">
@@ -32,19 +34,18 @@
               </div>
             </b-form-group>
 
+            <!-- button -->
+            <div class="box-footer">
+              <div class="button-wrapper">
+                <button type="submit" :class="{'button-danger': buttonSubmit}">
+                  เข้าสู่ระบบ
+                  <i class="fas fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+
           </b-form>
         </div>
-
-        <!-- footer -->
-        <div class="box-footer">
-          <div class="button-wrapper">
-            <button type="submit">
-              เข้าสู่ระบบ
-              <i class="fas fa-chevron-circle-right"></i>
-            </button>
-          </div>
-        </div>
-
       </div>
     </div>
   </div>
@@ -66,12 +67,24 @@ export default {
   name: 'login',
   data() {
     return {
+      buttonSubmit: false,
       form: {}
     };
+  },
+  methods: {
+    validateBeforeSubmit() {
+      this.$validator.validateAll().then(result => {
+        if (result) {
+          this.buttonSubmit = false;
+        } else {
+          this.buttonSubmit = true;
+        }
+      });
+    }
   }
 };
 </script>
 
 <style>
-
+ดนำาดนาำ
 </style>
