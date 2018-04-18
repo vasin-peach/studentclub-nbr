@@ -19,7 +19,7 @@
               <div class="input-container">
                 <span class="input-label">
                   <b>ชื่อผู้ใช้:</b> รหัสนักเรียน 5 หลัก</span>
-                <input v-validate="'required|numeric|digits:5'" v-model="form.username" :class="{'is-danger': errors.has('username')}" name="username" type="text" placeholder="15111" maxlength="5">
+                <input v-validate="'required|numeric|digits:5'" v-model="form.studentId" :class="{'is-danger': errors.has('username')}" name="username" type="text" placeholder="15111" maxlength="5">
                 <p v-show="errors.has('username')">{{ errors.first('username') }}</p>
               </div>
             </b-form-group>
@@ -53,6 +53,7 @@
 
 <script>
 import { Validator } from 'vee-validate';
+import { mapActions } from 'vuex';
 const messages = {
   en: {
     messages: {
@@ -72,10 +73,12 @@ export default {
     };
   },
   methods: {
+    ...mapActions(['login']),
     validateBeforeSubmit() {
       this.$validator.validateAll().then(result => {
         if (result) {
           this.buttonSubmit = false;
+          this.login(this.form);
         } else {
           this.buttonSubmit = true;
         }
@@ -86,4 +89,5 @@ export default {
 </script>
 
 <style>
+
 </style>

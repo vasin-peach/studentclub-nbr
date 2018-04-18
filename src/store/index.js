@@ -4,6 +4,7 @@ import Vuex from 'vuex';
 import BootstrapVue from 'bootstrap-vue';
 import VeeValidate from 'vee-validate';
 import auth from './modules/auth';
+import loading from './modules/loading';
 
 // Use Moduesl
 Vue.use(Vuex);
@@ -21,7 +22,8 @@ const debug = process.env.NODE_ENV !== 'production';
 //Export
 export default new Vuex.Store({
   modules: {
-    auth
+    auth,
+    loading
   },
   strict: debug
 });
