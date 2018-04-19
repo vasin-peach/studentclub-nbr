@@ -1,0 +1,48 @@
+.loading-wrapper {
+  height: 100vh;
+  .loading-fade {
+    z-index: 1;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: rgba($color-dark, $alpha: 0.8);
+  }
+  .loading-block {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    i.fa-spinner {
+      font-size: 10vw;
+      color: $color-white;
+      margin-bottom: 3vh;
+    }
+    span {
+      font-weight: bold;
+      color: $color-white;
+      font-size: 2vw;
+      display: inline-block;
+      margin: 0 -0.01em;
+      animation: loading-text 1.5s infinite;
+      @for $i from 1 through 10 {
+        &:nth-child(#{$i + 1}) {
+          animation-delay: #{$i * 0.1}s;
+        }
+      }
+    }
+  }
+}
+
+@keyframes loading-text {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+}

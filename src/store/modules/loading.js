@@ -1,8 +1,8 @@
 // initial state
 const state = {
   loading: {
-    full: false,
-    half: false
+    full: true,
+    half: true
   }
 };
 
@@ -12,11 +12,9 @@ const mutations = {
     if (state.loading.full) {
       setTimeout(() => {
         state.loading.full = value;
-        console.log(value);
       }, 1000);
     } else {
       state.loading.full = value;
-      console.log(value);
     }
   },
   halfLoadingChange(state, value) {
