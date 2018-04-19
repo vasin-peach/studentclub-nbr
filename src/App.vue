@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <transition name="app-fade">
+    <transition name="app-fade" mode="out-in">
       <div v-if="loading.loading.full">
         <div class="loading-wrapper">
           <div class="loading-fade"></div>
@@ -20,7 +20,7 @@
           </div>
         </div>
       </div>
-      <transition name="app-fade" mode="out-in">
+      <transition name="app-fade" mode="out-in" v-else>
         <router-view/>
       </transition>
     </transition>
@@ -46,7 +46,7 @@ export default {
 <style>
 .app-fade-enter-active,
 .app-fade-leave-active {
-  transition: opacity 0.3s ease;
+  transition: opacity 0.2s ease-in-out;
 }
 .app-fade-enter,
 .app-fade-leave-to {
