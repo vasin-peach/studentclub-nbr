@@ -6,6 +6,14 @@ import router from '../../router';
 // enable axios set cookie
 axios.defaults.withCredentials = true;
 
+// create request config
+var config = {
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  timeout: 0
+};
+
 // initial state
 const state = {
   user: {
@@ -29,6 +37,10 @@ const mutations = {
       state.user.token = token;
       state.user.studentId = userState.studentId;
       state.user.permission = userState.permission;
+    } else {
+      state.user.token = null;
+      state.user.studentId = null;
+      state.user.permission = null;
     }
   },
   saveToken(state, token) {}
@@ -72,14 +84,6 @@ const actions = {
   // User Login //
   login({ commit }, data) {
     commit('fullLoadingChange', true);
-
-    // create request config
-    let config = {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      timeout: 0
-    };
 
     //create request
     axios
@@ -134,6 +138,23 @@ const actions = {
           });
           return;
         }
+      });
+  },
+  // Logout //
+  logout({ commit }) {
+    //create request
+    commit('updateUserState', null);
+    axios
+      .post(
+        window.location.protocol +
+          '//' +
+          window.location.host.split(':')[0] +
+          ':3000/api/auth/logout',
+        config
+      )
+      // login success
+      .then(response => {
+        router.push({ name: 'Login' });
       });
   }
 };

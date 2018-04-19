@@ -1,8 +1,8 @@
 // initial state
 const state = {
   loading: {
-    full: true,
-    half: true
+    full: false,
+    half: false
   }
 };
 

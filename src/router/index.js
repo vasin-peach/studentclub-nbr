@@ -6,6 +6,7 @@ import axios from 'axios';
 // Layout route
 import layout from '@component/layout';
 import login from '@component/auth/login';
+import logout from '@component/auth/logout';
 import notfound from '@component/notfound';
 
 // Teacher route
@@ -37,6 +38,12 @@ const router = new Router({
           name: 'Login',
           alias: '/',
           meta: { noAuth: true }
+        },
+        {
+          path: '/logout',
+          component: logout,
+          name: 'Logout',
+          meta: { auth: true }
         },
         // STUDENT
         {

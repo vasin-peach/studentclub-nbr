@@ -31,15 +31,11 @@
 import { mapActions, mapState } from 'vuex';
 export default {
   name: 'App',
-  mounted() {
-    // this.session();
-  },
+  mounted() {},
   computed: {
     ...mapState(['loading'])
   },
-  methods: {
-    // ...mapActions(['session'])
-  }
+  methods: {}
 };
 </script>
 

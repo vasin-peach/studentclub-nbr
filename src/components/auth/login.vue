@@ -73,9 +73,7 @@ export default {
       form: {}
     };
   },
-  created() {
-    // console.log(this.getUser().token);
-  },
+  created() {},
   methods: {
     ...mapActions(['login']),
     ...mapGetters(['getUser']),

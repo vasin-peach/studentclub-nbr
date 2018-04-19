@@ -1,7 +1,7 @@
 <template>
   <div id="app-student-club">
-    Student Clib
-    <router-link :to="{ path: '/login'}">WRAP</router-link>
+    Student Club
+    <router-link :to="{ name: 'Logout'}">Logout</router-link>
   </div>
 </template>
 
