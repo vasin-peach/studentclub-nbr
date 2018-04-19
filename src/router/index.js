@@ -66,17 +66,28 @@ const router = new Router({
   ]
 });
 
+// ------------------ //
+// -- ROUTER GUARD -- //
+// ------------------ //
+
 router.beforeEach((to, from, next) => {
+  // check path exist
+  to.matched.length ? next() : next({ name: 'Notfound' });
+
+  // request session token every router update
   store.dispatch('session').then(response => {
     // user state
     var userState = store.getters.getUser;
-    // meta guard
+
+    // reuqest not login
     if (to.matched.some(record => record.meta.noAuth)) {
       if (userState.token) {
         next({ name: 'Student_Club' });
         return;
       }
     }
+
+    // request login
     if (to.matched.some(record => record.meta.auth)) {
       if (!userState.token) {
         next({ name: 'Login' });
