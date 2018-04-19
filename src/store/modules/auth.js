@@ -53,6 +53,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       // loading
       commit('fullLoadingChange', true);
+
       // create request config
       let config = {
         headers: {
@@ -68,6 +69,7 @@ const actions = {
             '//' +
             window.location.host.split(':')[0] +
             ':3000/api/session',
+          '',
           config
         )
         // request success
@@ -150,6 +152,7 @@ const actions = {
           '//' +
           window.location.host.split(':')[0] +
           ':3000/api/auth/logout',
+        '',
         config
       )
       // login success

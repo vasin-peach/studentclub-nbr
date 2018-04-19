@@ -2,6 +2,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import auth from './modules/auth';
+import club from './modules/club';
 import loading from './modules/loading';
 
 // Use Moduesl
@@ -14,6 +15,7 @@ const debug = process.env.NODE_ENV !== 'production';
 export default new Vuex.Store({
   modules: {
     auth,
+    club,
     loading
   },
   strict: false

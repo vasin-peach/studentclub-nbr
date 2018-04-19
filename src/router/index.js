@@ -51,7 +51,11 @@ const router = new Router({
           component: student,
           meta: { auth: true },
           children: [
-            { path: 'club', component: student_club, name: 'Student_Club' }
+            {
+              path: 'club',
+              component: student_club,
+              name: 'Student_Club'
+            }
           ]
         }
         // // TEACHER
@@ -94,7 +98,20 @@ router.beforeEach((to, from, next) => {
         return;
       }
     }
-    next();
+
+    // request club data
+    if (to.fullPath.split('/').indexOf('student') > 0) {
+      if (!store.getters.getClubAll) {
+        store.dispatch('clubGet', userState.token).then(response => {
+          store.commit('updateClubData', response.data.data);
+          console.log(store.getters.getClubRange(0, 3));
+        });
+      }
+    }
+    // store.dispatch('clubGet').then(response => {
+    //   var clubData = store.getters.getClub;
+    //   console.log(clubData);
+    // });
   });
 });
 
