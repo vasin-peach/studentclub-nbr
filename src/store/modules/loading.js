@@ -12,7 +12,7 @@ const mutations = {
     if (state.loading.full) {
       setTimeout(() => {
         state.loading.full = value;
-      }, 1000);
+      }, 500);
     } else {
       state.loading.full = value;
     }
@@ -21,7 +21,7 @@ const mutations = {
     if (state.loading.half) {
       setTimeout(() => {
         state.loading.half = value;
-      }, 1000);
+      }, 500);
     } else {
       state.loading.half = value;
     }

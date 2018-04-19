@@ -53,7 +53,8 @@
 
 <script>
 import { Validator } from 'vee-validate';
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
+import store from 'vuex';
 const messages = {
   en: {
     messages: {
@@ -72,8 +73,12 @@ export default {
       form: {}
     };
   },
+  created() {
+    // console.log(this.getUser().token);
+  },
   methods: {
     ...mapActions(['login']),
+    ...mapGetters(['getUser']),
     validateBeforeSubmit() {
       this.$validator.validateAll().then(result => {
         if (result) {

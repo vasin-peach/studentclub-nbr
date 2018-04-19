@@ -1,6 +1,7 @@
 import axios from 'axios';
 import swal from 'sweetalert2';
 import jwtDecode from 'jwt-decode';
+import router from '../../router';
 
 // enable axios set cookie
 axios.defaults.withCredentials = true;
@@ -14,12 +15,12 @@ const state = {
   }
 };
 
-// getters
+// GETTERS //
 const getters = {
   getUser: state => state.user
 };
 
-// mutations
+// MUTATIONS //
 const mutations = {
   // Update User Data
   updateUserState(state, token) {
@@ -33,36 +34,39 @@ const mutations = {
   saveToken(state, token) {}
 };
 
-// actions
+// ACTION //
 const actions = {
   // Get Token Session //
   session({ commit }) {
-    // loading
-    commit('fullLoadingChange', true);
-    // create request config
-    let config = {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      timeout: 0
-    };
+    return new Promise((resolve, reject) => {
+      // loading
+      commit('fullLoadingChange', true);
+      // create request config
+      let config = {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        timeout: 0
+      };
 
-    //create request
-    axios
-      .get(
-        window.location.protocol +
-          '//' +
-          window.location.host.split(':')[0] +
-          ':3000/api/session',
-        config
-      )
-      // request success
-      .then(response => {
-        if (response.status == 200) {
-          commit('updateUserState', response.data.token);
-          commit('fullLoadingChange', false);
-        }
-      });
+      //create request
+      axios
+        .get(
+          window.location.protocol +
+            '//' +
+            window.location.host.split(':')[0] +
+            ':3000/api/session',
+          config
+        )
+        // request success
+        .then(response => {
+          if (response.status == 200) {
+            commit('updateUserState', response.data.token);
+            commit('fullLoadingChange', false);
+            resolve(response);
+          }
+        });
+    });
   },
 
   // User Login //
@@ -99,6 +103,7 @@ const actions = {
         }
         commit('updateUserState', response.data.token);
         commit('fullLoadingChange', false);
+        router.push({ name: 'Student_Club' });
         return;
       })
 
@@ -134,7 +139,6 @@ const actions = {
 };
 
 // export
-
 export default {
   state,
   getters,

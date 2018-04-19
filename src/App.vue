@@ -32,13 +32,13 @@ import { mapActions, mapState } from 'vuex';
 export default {
   name: 'App',
   mounted() {
-    this.session();
+    // this.session();
   },
   computed: {
     ...mapState(['loading'])
   },
   methods: {
-    ...mapActions(['session'])
+    // ...mapActions(['session'])
   }
 };
 </script>
@@ -46,7 +46,7 @@ export default {
 <style>
 .app-fade-enter-active,
 .app-fade-leave-active {
-  transition: opacity 0.2s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
 }
 .app-fade-enter,
 .app-fade-leave-to {

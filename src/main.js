@@ -2,11 +2,18 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
 import App from './App';
+import BootstrapVue from 'bootstrap-vue';
 import VeeValidate from 'vee-validate';
 import router from './router';
 import store from './store';
 
 Vue.use(VeeValidate);
+Vue.use(BootstrapVue);
+
+// Import Assets
+import '@scss/app.scss';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 Vue.config.productionTip = false;
 

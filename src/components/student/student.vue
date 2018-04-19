@@ -1,6 +1,5 @@
 <template>
   <div class="app-student">
-    Student App
     <router-view/>
   </div>
 </template>
