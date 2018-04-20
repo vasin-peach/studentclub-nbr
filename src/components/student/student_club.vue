@@ -162,10 +162,10 @@ export default {
         // sort
         switch (select) {
           case 'sort_1': // new -> old
-            console.log(this.clubTemp.sort(this.sort_new_old));
+            this.clubTemp.sort(this.sort_new_old);
             break;
           case 'sort_2': // old -> new
-            console.log(this.clubTemp.sort(this.sort_gold_new));
+            this.clubTemp.sort(this.sort_gold_new);
             break;
           case 'sort_3': // number
             break;
