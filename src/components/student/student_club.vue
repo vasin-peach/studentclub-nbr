@@ -43,7 +43,7 @@
         <!-- <b-row class="club-block m-0"> -->
         <transition name="app-fade" mode="out-in">
           <transition-group name="club" class="club-block row m-0" tag="div" v-if="!getLoading().half">
-            <b-col class="club-item" v-for="(data, count) in clubTemp" :key="count" cols="12" sm="6" md="4" lg="3" xl="3">
+            <b-col class="club-item" v-for="(data, count) in clubShow" :key="count" cols="12" sm="6" md="4" lg="3" xl="3">
               <div class="card">
                 <div class="card-img-container">
                   <img class="card-img-top" v-bind:src="data.img">
@@ -74,8 +74,8 @@
         </transition>
         <div class="footer">
           <b-row class="m-0">
-            <b-col>
-              <b-pagination size="md" :total-rows="getClubAll().length" v-model="currentPage" :per-page="12" :disabled="!clubTemp || clubTemp == 'empty'">
+            <b-col v-if="clubShow">
+              <b-pagination size="md" :total-rows="clubTemp.length" v-model="currentPage" :per-page="12" :disabled="!clubTemp || clubTemp == 'empty'">
               </b-pagination>
             </b-col>
           </b-row>
@@ -89,6 +89,11 @@
 import { mapGetters, mapMutations } from 'vuex';
 export default {
   name: 'student_club',
+
+  // ---------- //
+  // -- DATA -- //
+  // ---------- //
+
   data() {
     return {
       search: null,
@@ -96,42 +101,113 @@ export default {
       sort: null,
       clubData: null,
       clubTemp: null,
+      clubShow: null,
       currentPage: 1,
-      notfound: false
+      notfound: false,
+      start: 0,
+      end: 12
     };
   },
+
+  // ------------- //
+  // -- MOUNTED -- //
+  // ------------- //
+
   mounted() {
     this.clubData = this.getClubRange(this.$store.state)(0, 24);
     if (this.clubData) {
-      this.clubTemp = this.clubData.slice(0, 12);
+      this.clubTemp = this.clubData;
     }
   },
+
+  // ----------- //
+  // -- WATCH -- //
+  // ----------- //
+
   watch: {
+    // Search
     search: function(name) {
       this.searchClub(name);
     },
+
+    // Page Change
     currentPage: function(page) {
-      var start = 12 * (page - 1);
-      var end = 12 * page;
-      var count = 0;
-      this.clubTemp = this.clubData.slice(start, end);
+      this.start = 12 * (page - 1);
+      this.end = 12 * page;
+      this.clubShow = this.clubTemp.slice(this.start, this.end);
     },
+
+    // Data temp change
     clubTemp: function() {
+      this.clubShow = this.clubTemp.slice(this.start, this.end);
+    },
+
+    // Data show change
+    clubShow: function() {
       this.halfLoadingChange(true);
       setTimeout(() => {
         this.halfLoadingChange(false);
       }, 200);
+    },
+
+    // Filter change
+    filter: function(select) {
+      if (select) {
+      }
+    },
+
+    // Sort change
+    sort: function(select) {
+      if (select) {
+        // sort
+        switch (select) {
+          case 'sort_1': // new -> old
+            console.log(this.clubTemp.sort(this.sort_new_old));
+            break;
+          case 'sort_2': // old -> new
+            console.log(this.clubTemp.sort(this.sort_gold_new));
+            break;
+          case 'sort_3': // number
+            break;
+        }
+      } else {
+        // cancel sort
+      }
     }
   },
+  // ------------- //
+  // -- METHODS -- //
+  // ------------- //
+
   methods: {
     ...mapGetters(['getClubAll', 'getClubRange', 'getLoading']),
     ...mapMutations(['halfLoadingChange']),
+
+    // Search club
     searchClub(name) {
       if (this.clubTemp) {
         this.clubTemp = this.clubData.filter(data => {
           return data.name.indexOf(name) > -1;
         });
       }
+    },
+    sort_new_old(a, b) {
+      if (a.created_on > b.created_on) {
+        return -1;
+      }
+      if (a.created_on < b.created_on) {
+        return 1;
+      }
+      return 0;
+    },
+    sort_gold_new(a, b) {
+      if (a.created_on < b.created_on) {
+        return -1;
+      }
+      if (a.created_on > b.created_on) {
+        return 1;
+      }
+      return 0;
     }
   }
 };
