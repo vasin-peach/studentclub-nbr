@@ -164,17 +164,21 @@ export default {
           case 'sort_1': // new -> old
             this.clubTemp.sort(this.sort_new_old);
             break;
+
           case 'sort_2': // old -> new
-            this.clubTemp.sort(this.sort_gold_new);
+            this.clubTemp.sort(this.sort_old_new);
             break;
+
           case 'sort_3': // number
             break;
         }
       } else {
-        // cancel sort
+        // cancel sort (old -> new)
+        this.clubTemp.sort(this.sort_old_new);
       }
     }
   },
+
   // ------------- //
   // -- METHODS -- //
   // ------------- //
@@ -200,7 +204,7 @@ export default {
       }
       return 0;
     },
-    sort_gold_new(a, b) {
+    sort_old_new(a, b) {
       if (a.created_on < b.created_on) {
         return -1;
       }
