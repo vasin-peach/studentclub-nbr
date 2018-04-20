@@ -83,6 +83,37 @@ const actions = {
     });
   },
 
+  // Check token expired //
+  checkTokenExpired({ commit }, token) {
+    return new Promise((resolve, reject) => {
+      //create request config
+      var config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': token
+        },
+        timeout: 0
+      };
+
+      //create request
+      axios
+        .post(
+          window.location.protocol +
+            '//' +
+            window.location.host.split(':')[0] +
+            ':3000/api/auth/check',
+          { token: token },
+          config
+        )
+        .then(response => {
+          resolve(response);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  },
+
   // User Login //
   login({ commit }, data) {
     commit('fullLoadingChange', true);

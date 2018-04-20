@@ -15,6 +15,7 @@ import teacher from '@component/teacher/teacher';
 // Student route
 import student from '@component/student/student';
 import student_club from '@component/student/student_club';
+import swal from 'sweetalert2';
 
 Vue.use(Router);
 
@@ -80,6 +81,25 @@ router.beforeEach((to, from, next) => {
 
   // request session token every router update
   store.dispatch('session').then(response => {
+    if (response.data.token) {
+      // check token expired
+      store
+        .dispatch('checkTokenExpired', response.data.token)
+        .then(check => {})
+        .catch(err => {
+          swal({
+            type: 'warning',
+            title: 'Authentication',
+            text: 'โทเคนหมดอายุ กรุณาเข้าสู่ระบบใหม่',
+            timer: 3000
+          }).then(() => {
+            store.dispatch('logout');
+            router.push({ name: 'Login' });
+            return;
+          });
+        });
+    }
+
     // user state
     var userState = store.getters.getUser;
 
@@ -104,7 +124,7 @@ router.beforeEach((to, from, next) => {
       if (!store.getters.getClubAll) {
         store.dispatch('clubGet', userState.token).then(response => {
           store.commit('updateClubData', response.data.data);
-          console.log(store.getters.getClubRange(0, 3));
+          // console.log(store.getters.getClubRange(0, 3));
         });
       }
     }

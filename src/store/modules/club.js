@@ -24,7 +24,7 @@ const state = {
 const getters = {
   getClubAll: state => state.club,
   getClubRange: state => (start, stop) => {
-    if (state.club.length) {
+    if (state.club) {
       return state.club.slice(start, stop);
     }
   }
@@ -36,7 +36,7 @@ const mutations = {
     if (data) {
       state.club = data;
     } else {
-      state.club = null;
+      state.club = 'empty';
     }
   }
 };

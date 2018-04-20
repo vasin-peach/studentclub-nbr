@@ -1,0 +1,30 @@
+.club-header {
+  margin-bottom: 10px;
+  .col {
+  }
+}
+
+.club-block {
+  .club-item {
+    margin-bottom: 20px;
+    .card {
+      .card-img-container {
+        width: 100%;
+        height: 35vh;
+        img {
+          height: 35vh;
+          object-fit: cover;
+        }
+      }
+      .card-body {
+        min-height: 150px;
+      }
+    }
+  }
+}
+
+.loading-half-wrapper {
+  min-height: 30vh;
+  width: 100%;
+  @include center;
+}
