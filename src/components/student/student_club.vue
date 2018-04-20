@@ -40,26 +40,25 @@
             </b-form>
           </b-col>
         </b-row>
+        <!-- <b-row class="club-block m-0"> -->
         <transition name="app-fade" mode="out-in">
-          <div v-if="clubTemp && clubTemp != 'empty'">
-            <!-- <b-row class="club-block m-0"> -->
-            <transition-group name="club" class="club-block row m-0" tag="div">
-              <b-col class="club-item" v-for="(data, count) in clubTemp" :key="count" cols="12" sm="6" md="4" lg="3" xl="3">
-                <div class="card">
-                  <div class="card-img-container">
-                    <img class="card-img-top" v-bind:src="data.img">
-                  </div>
-                  <div class="card-body">
-                    <h4 class="card-title">{{ data.name }}</h4>
-                    <p class="card-text">
-                      {{ data.desc || ' ไม่มีคำอธิบาย. '}}
-                    </p>
-                  </div>
+          <transition-group name="club" class="club-block row m-0" tag="div" v-if="!getLoading().half">
+            <b-col class="club-item" v-for="(data, count) in clubTemp" :key="count" cols="12" sm="6" md="4" lg="3" xl="3">
+              <div class="card">
+                <div class="card-img-container">
+                  <img class="card-img-top" v-bind:src="data.img">
                 </div>
-              </b-col>
-            </transition-group>
-            <!-- </b-row> -->
-          </div>
+                <div class="card-body">
+                  <h4 class="card-title">{{ data.name }}</h4>
+                  <p class="card-text">
+                    {{ data.desc || ' ไม่มีคำอธิบาย. '}}
+                  </p>
+                </div>
+              </div>
+            </b-col>
+          </transition-group>
+          <!-- </b-row> -->
+
           <div class="loading-half-wrapper" v-else>
             <div class="loading-half-fade">
               <div v-if="clubTemp == 'empty'" class="text-center">
@@ -87,7 +86,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 export default {
   name: 'student_club',
   data() {
@@ -104,16 +103,29 @@ export default {
   mounted() {
     this.clubData = this.getClubRange(this.$store.state)(0, 24);
     if (this.clubData) {
-      this.clubTemp = this.clubData;
+      this.clubTemp = this.clubData.slice(0, 12);
     }
   },
   watch: {
     search: function(name) {
       this.searchClub(name);
+    },
+    currentPage: function(page) {
+      var start = 12 * (page - 1);
+      var end = 12 * page;
+      var count = 0;
+      this.clubTemp = this.clubData.slice(start, end);
+    },
+    clubTemp: function() {
+      this.halfLoadingChange(true);
+      setTimeout(() => {
+        this.halfLoadingChange(false);
+      }, 200);
     }
   },
   methods: {
-    ...mapGetters(['getClubAll', 'getClubRange']),
+    ...mapGetters(['getClubAll', 'getClubRange', 'getLoading']),
+    ...mapMutations(['halfLoadingChange']),
     searchClub(name) {
       if (this.clubTemp) {
         this.clubTemp = this.clubData.filter(data => {
