@@ -23,9 +23,10 @@
               <b-form-select v-model="filter" :disabled="!clubTemp || clubTemp == 'empty'">
                 <option :value="null">-- คัดกรอง --</option>
                 <option :value="'filter_1'">ยังไม่เต็ม</option>
-                <option :value="'filter_2'">ระดับชั้น มัธยมต้น</option>
-                <option :value="'filter_3'">ระดับชั้น มัธยมปลาย</option>
+                <option :value="'filter_2'">เต็มแล้ว</option>
+                <option :value="'filter_3'">ระดับชั้น มัธยมต้น</option>
                 <option :value="'filter_4'">ระดับชั้น มัธยมปลาย</option>
+                <option :value="'filter_5'">ระดับชั้น มัธยมปลาย</option>
               </b-form-select>
             </b-form>
           </b-col>
@@ -35,7 +36,8 @@
                 <option :value="null">-- เรียงตาม --</option>
                 <option :value="'sort_1'">ใหม่ -> เก่า</option>
                 <option :value="'sort_2'">เก่า -> ใหม่</option>
-                <option :value="'sort_3'">จำนวนคน</option>
+                <option :value="'sort_3'">จำนวนที่ลง</option>
+                <option :value="'sort_4'">จำนวนที่รับ</option>
               </b-form-select>
             </b-form>
           </b-col>
@@ -53,6 +55,20 @@
                   <p class="card-text">
                     {{ data.desc || ' ไม่มีคำอธิบาย. '}}
                   </p>
+                </div>
+                <div class="card-footer">
+                  <b-row class="m-0">
+                    <b-col class="p-0" cols="12" sm="12" md="12">
+                      ระดับชั้น:
+                      <span class="font-light">{{ data.receive == 'both' ? 'ทั้งหมด' : data.receive == 'junior' ? 'มัธยมต้น' : data.receive == 'senior' ? 'มันธยมปลาย' : '' }}</span>
+                    </b-col>
+                    <b-col class="p-0 mt-1" cols="12">
+                      <i class="fas fa-user fa-1x font-red" v-if="data.entry.current < data.entry.max"></i>
+                      <i class="fas fa-user-times fa-1x font-danger" v-else></i>
+                      {{ data.entry.current}} / {{ data.entry.max }}
+                    </b-col>
+                  </b-row>
+
                 </div>
               </div>
             </b-col>
@@ -104,7 +120,8 @@ export default {
       currentPage: 1,
       notfound: false,
       start: 0,
-      end: 12
+      end: 12,
+      timeout: null
     };
   },
 
@@ -126,7 +143,11 @@ export default {
   watch: {
     // Search
     search: function(name) {
-      this.searchClub(name);
+      var _this = this;
+      clearTimeout(this.timeout);
+      this.timeout = setTimeout(function() {
+        _this.searchClub(name);
+      }, 300);
     },
 
     // Page Change
@@ -156,30 +177,14 @@ export default {
 
     // Filter change
     filter: function(select) {
-      if (select) {
-      }
+      this.filterTemp(select);
+      this.sortTemp(this.sort);
     },
 
     // Sort change
     sort: function(select) {
-      if (select) {
-        // sort
-        switch (select) {
-          case 'sort_1': // new -> old
-            this.clubTemp.sort(this.sort_new_old);
-            break;
-
-          case 'sort_2': // old -> new
-            this.clubTemp.sort(this.sort_old_new);
-            break;
-
-          case 'sort_3': // number
-            break;
-        }
-      } else {
-        // cancel sort (old -> new)
-        this.clubTemp.sort(this.sort_old_new);
-      }
+      this.filterTemp(this.filter);
+      this.sortTemp(select);
     }
   },
 
@@ -197,9 +202,54 @@ export default {
         this.clubTemp = this.clubData.filter(data => {
           return data.name.indexOf(name) > -1;
         });
-        this.sort = this.sort;
+        this.sortTemp(this.sort);
       }
     },
+    filterTemp(select) {
+      if (select) {
+        // filter
+        switch (select) {
+          case 'filter_1': // ยังไม่เต็ม
+            this.clubTemp = this.clubData.filter(elm => {
+              return elm.entry.current != elm.entry.max;
+            });
+            break;
+          case 'filter_2': //เต็มแล้ว
+            this.clubTemp = this.clubData.filter(elm => {
+              return elm.entry.current >= elm.entry.max;
+            });
+            break;
+        }
+      } else {
+        this.clubTemp = this.clubData;
+      }
+    },
+    sortTemp(select) {
+      if (select) {
+        // sort
+        switch (select) {
+          case 'sort_1': // new -> old
+            this.clubTemp.sort(this.sort_new_old);
+            break;
+
+          case 'sort_2': // old -> new
+            this.clubTemp.sort(this.sort_old_new);
+            break;
+
+          case 'sort_3': // number
+            this.clubTemp.sort(this.sort_entry);
+            break;
+          case 'sort_4': // number
+            this.clubTemp.sort(this.sort_max);
+            break;
+        }
+      } else {
+        // default
+        this.clubTemp.sort(this.sort_old_new);
+      }
+    },
+
+    // Sort //
     sort_new_old(a, b) {
       if (a.created_on > b.created_on) {
         return -1;
@@ -214,6 +264,24 @@ export default {
         return -1;
       }
       if (a.created_on > b.created_on) {
+        return 1;
+      }
+      return 0;
+    },
+    sort_entry(a, b) {
+      if (a.entry.current > b.entry.current) {
+        return -1;
+      }
+      if (a.entry.current < b.entry.current) {
+        return 1;
+      }
+      return 0;
+    },
+    sort_max(a, b) {
+      if (a.entry.max > b.entry.max) {
+        return -1;
+      }
+      if (a.entry.max < b.entry.max) {
         return 1;
       }
       return 0;

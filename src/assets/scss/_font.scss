@@ -3,7 +3,19 @@ $roboto: 'Roboto', 'Kanit', sans-serif;
 .font-roboto {
   font-family: $roboto;
 }
+.font-bold {
+  font-weight: bold !important;
+}
+.font-light {
+  font-weight: 300 !important;
+}
 
+.font-danger {
+  color: $color-danger !important;
+}
 .font-white {
   color: $color-white !important;
+}
+.font-red {
+  color: $color-red !important;
 }

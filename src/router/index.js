@@ -124,14 +124,9 @@ router.beforeEach((to, from, next) => {
       if (!store.getters.getClubAll) {
         store.dispatch('clubGet', userState.token).then(response => {
           store.commit('updateClubData', response.data.data);
-          // console.log(store.getters.getClubRange(0, 3));
         });
       }
     }
-    // store.dispatch('clubGet').then(response => {
-    //   var clubData = store.getters.getClub;
-    //   console.log(clubData);
-    // });
   });
 });
 
