@@ -40,9 +40,9 @@
             </b-form>
           </b-col>
         </b-row>
-        <!-- <b-row class="club-block m-0"> -->
+
         <transition name="app-fade" mode="out-in">
-          <transition-group name="club" class="club-block row m-0" tag="div" v-if="!getLoading().half">
+          <transition-group name="club" class="club-block row m-0" tag="div" v-if="!getLoading().half && clubTemp != 'notfound'">
             <b-col class="club-item" v-for="(data, count) in clubShow" :key="count" cols="12" sm="6" md="4" lg="3" xl="3">
               <div class="card">
                 <div class="card-img-container">
@@ -57,11 +57,10 @@
               </div>
             </b-col>
           </transition-group>
-          <!-- </b-row> -->
 
           <div class="loading-half-wrapper" v-else>
             <div class="loading-half-fade">
-              <div v-if="clubTemp == 'empty'" class="text-center">
+              <div v-if="clubTemp == 'notfound'" class="text-center">
                 <i class="fas fa-exclamation-circle fa-3x mb-1"></i> <br> ไม่พบข้อมูล
               </div>
               <div class="loading-half-block" v-else>
@@ -139,7 +138,12 @@ export default {
 
     // Data temp change
     clubTemp: function() {
-      this.clubShow = this.clubTemp.slice(this.start, this.end);
+      if (this.clubTemp) {
+        this.clubShow = this.clubTemp.slice(this.start, this.end);
+        if (!this.clubTemp.length) {
+          this.clubTemp = 'notfound';
+        }
+      }
     },
 
     // Data show change
@@ -193,6 +197,7 @@ export default {
         this.clubTemp = this.clubData.filter(data => {
           return data.name.indexOf(name) > -1;
         });
+        this.sort = this.sort;
       }
     },
     sort_new_old(a, b) {
