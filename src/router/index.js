@@ -103,7 +103,7 @@ router.beforeEach((to, from, next) => {
     // user state
     var userState = store.getters.getUser;
 
-    store.dispatch('userSelf', userState.token).then(response => {});
+    store.dispatch('userSelf', userState.token);
 
     // reuqest not login
     if (to.matched.some(record => record.meta.noAuth)) {
@@ -124,9 +124,7 @@ router.beforeEach((to, from, next) => {
     // request club data
     if (to.fullPath.split('/').indexOf('student') > 0) {
       if (!store.getters.getClubAll) {
-        store.dispatch('clubGet', userState.token).then(response => {
-          store.commit('updateClubData', response.data.data);
-        });
+        store.dispatch('clubGet', userState.token);
       }
     }
   });

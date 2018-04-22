@@ -70,13 +70,67 @@ const actions = {
         )
         .then(response => {
           if (response.status == 200) {
+            commit('updateClubData', response.data.data);
             resolve(response);
             commit('halfLoadingChange', false);
           } else {
             reject();
             commit('halfLoadingChange', false);
           }
+        })
+        // token expired
+        .catch(err => {
+          router.push({ name: 'Logout' });
         });
+    });
+  },
+  // -- Update Current(member) -- //
+  clubUpdateCurrent({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      // check payload not empty
+      if (data.name && data.amount && data.token) {
+        // loading
+        commit('halfLoadingChange', true);
+
+        // create request config
+        let config = {
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Headers': 'x-access-token',
+            'x-access-token': data.token
+          },
+          timeout: 0
+        };
+
+        // create payload
+        let payload = {
+          amount: data.amount,
+          name: data.name
+        };
+
+        axios
+          .post(
+            window.location.protocol +
+              '//' +
+              window.location.host.split(':')[0] +
+              ':3000/api/club/update/current',
+            payload,
+            config
+          )
+          .then(response => {
+            if (response.status == 200) {
+              resolve(response);
+              commit('halfLoadingChange', false);
+            } else {
+              reject();
+              commit('halfLoadingChange', false);
+            }
+          })
+          // token expired
+          .catch(err => {
+            router.push({ name: 'Logout' });
+          });
+      }
     });
   }
 };

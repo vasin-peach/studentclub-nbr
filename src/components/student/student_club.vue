@@ -12,13 +12,18 @@
         </b-col>
       </b-row>
       <div class="body">
+        <b-row class="club-profile m-0 mb-3">
+          <b-col class="text-right">{{ user.profile.prefix }}{{ user.profile.firstname}} {{ user.profile.lastname}} ( {{ user.studentId }} )
+            <router-link :to="{name: 'Logout'}" class="font-danger">ออกจากระบบ</router-link>
+          </b-col>
+        </b-row>
         <b-row class="club-header m-0 mb-3">
-          <b-col cols="12" sm="6" md="4" lg="6" class="club-search">
+          <b-col class="club-search mb-2" cols="12" sm="6" md="4" lg="6">
             <b-form @submit.prevent="searchClub(search)">
               <b-form-input v-model="search" type="text" placeholder="ค้นหา" :disabled="!clubTemp || clubTemp == 'empty'"></b-form-input>
             </b-form>
           </b-col>
-          <b-col class="club-filter" cols="12" sm="3" md="4" lg="3">
+          <b-col class="club-filter mb-2" cols="12" sm="3" md="4" lg="3">
             <b-form @submit.prevent>
               <b-form-select v-model="filter" :disabled="!clubTemp || clubTemp == 'empty'">
                 <option :value="null">-- คัดกรอง --</option>
@@ -26,11 +31,11 @@
                 <option :value="'filter_2'">เต็มแล้ว</option>
                 <option :value="'filter_3'">ระดับชั้น มัธยมต้น</option>
                 <option :value="'filter_4'">ระดับชั้น มัธยมปลาย</option>
-                <option :value="'filter_5'">ระดับชั้น มัธยมปลาย</option>
+                <option :value="'filter_5'">ทั้งมัธยมต้นและปลาย</option>
               </b-form-select>
             </b-form>
           </b-col>
-          <b-col class="club-sort" cols="">
+          <b-col class="club-sort mb-2" cols="">
             <b-form @submit.prevent>
               <b-form-select v-model="sort" :disabled="!clubTemp || clubTemp == 'empty'">
                 <option :value="null">-- เรียงตาม --</option>
@@ -46,7 +51,7 @@
         <!-- Popup Entry Club -->
         <b-modal id="entry" ref="entry" hide-footer>
           <div v-if="entry">
-            <img v-bind:src="entry.img" class="w-100 mb-3" style="height: 35vh; object-fit: cover;">
+            <img v-bind:src="entry.img" class="w-100 mb-3" style="object-fit: cover; object-position: center;">
             <b-row class="m-0">
               <b-col>
                 <p class="h2 font-bold">{{ entry.name }}</p>
@@ -82,7 +87,7 @@
                 <b-btn class="bg-red" @click="submitClub(entry)" v-if="!user.profile.club">ลงทะเบียนชุมนุม</b-btn>
                 <b-btn class="bg-red" disabled v-if="user.profile.club && user.profile.club != entry.name">นักเรียนได้ลงชุมนุม
                   <b class="font-bold font-white">{{user.profile.club}}</b> ไปแล้ว</b-btn>
-                <b-btn class="bg-danger" v-if="user.profile.club == entry.name">ออกจากชุมนุม</b-btn>
+                <b-btn class="bg-danger" v-if="user.profile.club == entry.name" @click="cancelClub(entry)">ออกจากชุมนุม</b-btn>
               </b-col>
             </b-row>
           </div>
@@ -177,11 +182,7 @@ export default {
   // ------------- //
 
   mounted() {
-    this.clubData = this.getClubRange(this.$store.state)(0, 24);
-    if (this.clubData) {
-      this.clubTemp = this.clubData;
-      this.sortTemp(null);
-    }
+    this.initClub();
   },
 
   // ----------- //
@@ -245,8 +246,16 @@ export default {
   methods: {
     ...mapGetters(['getClubAll', 'getClubRange', 'getLoading', 'getUser']),
     ...mapMutations(['halfLoadingChange']),
-    ...mapActions(['userUpdate']),
+    ...mapActions(['userUpdate', 'userSelf', 'clubUpdateCurrent', 'clubGet']),
 
+    // init club {
+    initClub() {
+      this.clubData = this.getClubAll();
+      if (this.clubData) {
+        this.clubTemp = this.clubData;
+        this.sortTemp(null);
+      }
+    },
     // entry club {
     entryClub(data) {
       this.entry = data;
@@ -281,6 +290,15 @@ export default {
             });
           });
           this.$refs.entry.hide();
+          this.clubUpdateCurrent({
+            name: data.name,
+            amount: 1,
+            token: this.user.token
+          });
+          this.userSelf(this.user.token);
+          this.clubGet(this.user.token).then(response => {
+            this.initClub();
+          });
         }
       });
     },
@@ -313,6 +331,15 @@ export default {
             });
           });
           this.$refs.entry.hide();
+          this.clubUpdateCurrent({
+            name: data.name,
+            amount: -1,
+            token: this.user.token
+          });
+          this.userSelf(this.user.token);
+          this.clubGet(this.user.token).then(response => {
+            this.initClub();
+          });
         }
       });
     },
@@ -338,6 +365,21 @@ export default {
           case 'filter_2': //เต็มแล้ว
             this.clubTemp = this.clubData.filter(elm => {
               return elm.entry.current >= elm.entry.max;
+            });
+            break;
+          case 'filter_3': //ม.ต้น junior
+            this.clubTemp = this.clubData.filter(elm => {
+              return elm.receive == 'junior';
+            });
+            break;
+          case 'filter_4': //ม.ปลาย senior
+            this.clubTemp = this.clubData.filter(elm => {
+              return elm.receive == 'senior';
+            });
+            break;
+          case 'filter_5': //รับทั้งหมด
+            this.clubTemp = this.clubData.filter(elm => {
+              return elm.receive == 'both';
             });
             break;
         }
