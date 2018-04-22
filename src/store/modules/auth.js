@@ -43,7 +43,13 @@ const mutations = {
       state.user.permission = null;
     }
   },
-  saveToken(state, token) {}
+  updateUserProfile(state, data) {
+    if (data) {
+      state.user.profile = data;
+    } else {
+      state.user.profile = null;
+    }
+  }
 };
 
 // ACTION //
@@ -190,6 +196,88 @@ const actions = {
       .then(response => {
         router.push({ name: 'Login' });
       });
+  },
+
+  // -- Update user -- //
+  userUpdate({ commit }, payload) {
+    var token = this.getters.getUser.token;
+    if (payload && token) {
+      return new Promise((resolve, reject) => {
+        // loading
+        commit('halfLoadingChange', true);
+
+        // create request config
+        var config = {
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Headers': 'x-access-token',
+            'x-access-token': token
+          },
+          timeout: 0
+        };
+
+        axios
+          .post(
+            window.location.protocol +
+              '//' +
+              window.location.host.split(':')[0] +
+              ':3000/api/auth/update',
+            { payload: payload },
+            config
+          )
+          .then(response => {
+            if (response.status == 200) {
+              resolve(response);
+              commit('halfLoadingChange', false);
+            } else {
+              reject();
+              commit('halfLoadingChange', false);
+            }
+          });
+      });
+    }
+  },
+
+  // -- Get self profile -- //
+  userSelf({ commit }, token) {
+    return new Promise((resolve, reject) => {
+      // check token exist
+      if (!token) return reject();
+
+      // turn on loading
+      commit('halfLoadingChange', true);
+
+      // create request config
+      var config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Headers': 'x-access-token',
+          'x-access-token': token
+        },
+        timeout: 0
+      };
+
+      // request
+      axios
+        .post(
+          window.location.protocol +
+            '//' +
+            window.location.host.split(':')[0] +
+            ':3000/api/auth/self',
+          null,
+          config
+        )
+        .then(response => {
+          if (response.status == 200) {
+            commit('updateUserProfile', response.data.data);
+            commit('halfLoadingChange', false);
+            return resolve(response);
+          } else {
+            commit('halfLoadingChange', false);
+            return reject();
+          }
+        });
+    });
   }
 };
 

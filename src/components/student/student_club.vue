@@ -43,10 +43,55 @@
           </b-col>
         </b-row>
 
+        <!-- Popup Entry Club -->
+        <b-modal id="entry" ref="entry" hide-footer>
+          <div v-if="entry">
+            <img v-bind:src="entry.img" class="w-100 mb-3" style="height: 35vh; object-fit: cover;">
+            <b-row class="m-0">
+              <b-col>
+                <p class="h2 font-bold">{{ entry.name }}</p>
+              </b-col>
+            </b-row>
+            <b-row class="m-0">
+              <b-col>
+                <p>{{ entry.desc || 'ไม่มีคำอธิบาย' }}</p> <hr>
+              </b-col>
+            </b-row>
+            <b-row class="m-0">
+              <b-col class="font-bold">ผู้รับผิดชอบ</b-col>
+            </b-row>
+            <b-row class="m-0" v-for="owner in entry.owner" :key="owner.key">
+              <b-col>
+                <span>{{ owner.prefix }} {{ owner.firstname }} {{ owner.lastname}}</span>
+              </b-col>
+            </b-row>
+            <b-row class="m-0 mt-3">
+              <b-col cols="12" sm="12" md="12">
+                <span class="font-bold">ระดับชั้นที่รับ:</span>
+                <span>{{ entry.receive == 'both' ? 'ทั้งหมด' : entry.receive == 'junior' ? 'มัธยมต้น' : entry.receive == 'senior' ? 'มันธยมปลาย' : '' }}</span>
+              </b-col>
+              <b-col class="mt-1" cols="12">
+                <span class="font-bold">จำนวน: </span>
+                <span :class="{'font-danger': entry.entry.current >= entry.entry.max}">{{ entry.entry.current}} / {{ entry.entry.max }}</span>
+                <i class="fas fa-user fa-1x" v-if="entry.entry.current < entry.entry.max"></i>
+                <i class="fas fa-user-times fa-1x font-danger" v-else></i><hr>
+              </b-col>
+            </b-row>
+            <b-row class="m-0 p-3">
+              <b-col class="text-center">
+                <b-btn class="bg-red" @click="submitClub(entry)" v-if="!user.profile.club">ลงทะเบียนชุมนุม</b-btn>
+                <b-btn class="bg-red" disabled v-if="user.profile.club && user.profile.club != entry.name">นักเรียนได้ลงชุมนุม
+                  <b class="font-bold font-white">{{user.profile.club}}</b> ไปแล้ว</b-btn>
+                <b-btn class="bg-danger" v-if="user.profile.club == entry.name">ออกจากชุมนุม</b-btn>
+              </b-col>
+            </b-row>
+          </div>
+        </b-modal>
+
         <transition name="app-fade" mode="out-in">
           <transition-group name="club" class="club-block row m-0" tag="div" v-if="!getLoading().half && clubTemp != 'notfound'">
             <b-col class="club-item" v-for="(data, count) in clubShow" :key="count" cols="12" sm="6" md="4" lg="3" xl="3">
-              <div class="card">
+              <div class="card" @click="entryClub(data)">
                 <div class="card-img-container">
                   <img class="card-img-top" v-bind:src="data.img">
                 </div>
@@ -65,10 +110,9 @@
                     <b-col class="p-0 mt-1" cols="12">
                       <i class="fas fa-user fa-1x font-red" v-if="data.entry.current < data.entry.max"></i>
                       <i class="fas fa-user-times fa-1x font-danger" v-else></i>
-                      {{ data.entry.current}} / {{ data.entry.max }}
+                      <span :class="{'font-danger': data.entry.current >= data.entry.max}">{{ data.entry.current}} / {{ data.entry.max }}</span>
                     </b-col>
                   </b-row>
-
                 </div>
               </div>
             </b-col>
@@ -101,7 +145,8 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
+import swal from 'sweetalert2';
 export default {
   name: 'student_club',
 
@@ -111,6 +156,7 @@ export default {
 
   data() {
     return {
+      user: this.getUser(),
       search: null,
       filter: null,
       sort: null,
@@ -121,7 +167,8 @@ export default {
       notfound: false,
       start: 0,
       end: 12,
-      timeout: null
+      timeout: null,
+      entry: null
     };
   },
 
@@ -133,6 +180,7 @@ export default {
     this.clubData = this.getClubRange(this.$store.state)(0, 24);
     if (this.clubData) {
       this.clubTemp = this.clubData;
+      this.sortTemp(null);
     }
   },
 
@@ -147,7 +195,7 @@ export default {
       clearTimeout(this.timeout);
       this.timeout = setTimeout(function() {
         _this.searchClub(name);
-      }, 300);
+      }, 500);
     },
 
     // Page Change
@@ -164,6 +212,8 @@ export default {
         if (!this.clubTemp.length) {
           this.clubTemp = 'notfound';
         }
+      } else {
+        this.clubTemp = 'notfound';
       }
     },
 
@@ -193,8 +243,79 @@ export default {
   // ------------- //
 
   methods: {
-    ...mapGetters(['getClubAll', 'getClubRange', 'getLoading']),
+    ...mapGetters(['getClubAll', 'getClubRange', 'getLoading', 'getUser']),
     ...mapMutations(['halfLoadingChange']),
+    ...mapActions(['userUpdate']),
+
+    // entry club {
+    entryClub(data) {
+      this.entry = data;
+      this.$refs.entry.show();
+    },
+
+    // submit club
+    submitClub(data) {
+      swal({
+        title: 'ยืนยันการลงทะเบียน',
+        html:
+          'นักเรียนต้องการลงทะเบียนชุมนุม <b class="font-bold">' +
+          data.name +
+          '</b> ใช่หรือไม่?',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ใช่, ลงทะเบียน',
+        cancelButtonText: 'ไม่, ยกเลิก'
+      }).then(result => {
+        // confirm submit club
+        if (result.value == true) {
+          this.userUpdate({ club: data.name }).then(response => {
+            swal({
+              type: 'success',
+              title: 'ลงทะเบียนเสร็จสิ้น',
+              html:
+                'นักเรียนได้ลงทะเบียนชุมนุม <b class="font-bold">' +
+                data.name +
+                '</b> แล้ว.',
+              timer: 2500
+            });
+          });
+          this.$refs.entry.hide();
+        }
+      });
+    },
+
+    // cancle club
+    cancelClub(data) {
+      swal({
+        title: 'ยืนยันการออกชุมนุม',
+        html:
+          'นักเรียนต้องการออกจากชุมนุม <b class="font-bold">' +
+          data.name +
+          '</b> ใช่หรือไม่?',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ใช่, ออกจากชุมนุม',
+        cancelButtonText: 'ไม่, ยกเลิก'
+      }).then(result => {
+        // confirm submit club
+        if (result.value == true) {
+          this.userUpdate({ club: null }).then(response => {
+            swal({
+              type: 'success',
+              title: 'ออกจากชุมนุมเสร็จสิ้น',
+              html:
+                'นักเรียนได้ออกจากชุมนุม <b class="font-bold">' +
+                data.name +
+                '</b> แล้ว.',
+              timer: 2500
+            });
+          });
+          this.$refs.entry.hide();
+        }
+      });
+    },
 
     // Search club
     searchClub(name) {
@@ -245,7 +366,7 @@ export default {
         }
       } else {
         // default
-        this.clubTemp.sort(this.sort_old_new);
+        this.clubTemp.sort(this.sort_new_old);
       }
     },
 
@@ -299,19 +420,6 @@ export default {
 .app-fade-enter,
 .app-fade-leave-to {
   opacity: 0;
-}
-
-.club-item {
-  transition: all 0.5s ease-in-out;
-  margin-top: 30px;
-  transform: translateY(-30px);
-}
-.club-enter,
-.club-leave-to {
-  opacity: 0;
-  transform: translateY(30px);
-}
-.club-leave-active {
 }
 </style>
 

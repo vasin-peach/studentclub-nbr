@@ -18,4 +18,10 @@
     text-decoration: none;
     color: $color-base;
   }
+  body.modal-open {
+    padding-right: 17px !important;
+    @include mobile {
+      padding-right: 0px !important;
+    }
+  }
 }
