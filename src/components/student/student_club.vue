@@ -312,7 +312,9 @@ export default {
               });
             })
             .catch(() => {
-              this.initClub();
+              this.clubGet(this.user.token).then(response => {
+                this.initClub();
+              });
             });
           this.$refs.entry.hide();
         }
@@ -339,23 +341,29 @@ export default {
             name: data.name,
             amount: -1,
             token: this.user.token
-          }).then(() => {
-            this.userUpdate({ club: null }).then(() => {
-              swal({
-                type: 'success',
-                title: 'ออกจากชุมนุมเสร็จสิ้น',
-                html:
-                  'นักเรียนได้ออกจากชุมนุม <b class="font-bold">' +
-                  data.name +
-                  '</b> แล้ว.',
-                timer: 2500
+          })
+            .then(() => {
+              this.userUpdate({ club: null }).then(() => {
+                swal({
+                  type: 'success',
+                  title: 'ออกจากชุมนุมเสร็จสิ้น',
+                  html:
+                    'นักเรียนได้ออกจากชุมนุม <b class="font-bold">' +
+                    data.name +
+                    '</b> แล้ว.',
+                  timer: 2500
+                });
+                this.userSelf(this.user.token);
+                this.clubGet(this.user.token).then(response => {
+                  this.initClub();
+                });
               });
-              this.userSelf(this.user.token);
+            })
+            .catch(() => {
               this.clubGet(this.user.token).then(response => {
                 this.initClub();
               });
             });
-          });
           this.$refs.entry.hide();
         }
       });
