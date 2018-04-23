@@ -84,6 +84,7 @@ const actions = {
         });
     });
   },
+
   // -- Update Current(member) -- //
   clubUpdateCurrent({ commit }, data) {
     return new Promise((resolve, reject) => {
@@ -137,6 +138,53 @@ const actions = {
             return reject();
           });
       }
+    });
+  },
+
+  // -- Remove Club -- //
+  clubRemove({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      // check token exist
+      if (!data.token) return reject();
+
+      // loading on
+      commit('halfLoadingChange', true);
+
+      // create request config
+      let config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Headers': 'x-access-token',
+          'x-access-token': data.token
+        },
+        timeout: 0
+      };
+
+      // create payload
+      let payload = {
+        name: data.name
+      };
+
+      // request to server
+      axios
+        .post(
+          window.location.protocol +
+            '//' +
+            window.location.host.split(':')[0] +
+            ':3000/api/club/remove',
+          payload,
+          config
+        )
+        .then(response => {
+          if (response.data.code == 200) {
+            resolve(response);
+          } else {
+            reject();
+          }
+        })
+        .catch(() => {
+          reject();
+        });
     });
   }
 };

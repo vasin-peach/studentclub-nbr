@@ -55,6 +55,10 @@
             <b-row class="m-0">
               <b-col>
                 <p class="h2 font-bold">{{ entry.name }}</p>
+                <div v-if="user.permission >= 2">
+                  <span class="font-success">แก้ไขชุมนุม</span>
+                  <span class="font-danger">ลบชุมนุม</span>
+                </div>
               </b-col>
             </b-row>
             <b-row class="m-0">
@@ -82,6 +86,13 @@
                 <i class="fas fa-user-times fa-1x font-danger" v-else></i><hr>
               </b-col>
             </b-row>
+            <!-- <b-row class="m-0" v-if="user.permission >= 2">
+              <b-col>
+                <span class="font-danger">ลบชุมนุม</span>
+                <span class="font-red">แก้ไขชุมนุม</span>
+                <hr>
+              </b-col>
+            </b-row> -->
             <b-row class="m-0 p-3">
               <b-col class="text-center">
                 <div v-if="entry.receive == 'junior' || entry.recieve == 'senior'">
@@ -105,28 +116,33 @@
         <transition name="app-fade" mode="out-in">
           <transition-group name="club" class="club-block row m-0" tag="div" v-if="!getLoading().half && clubTemp != 'notfound'">
             <b-col class="club-item" v-for="(data, count) in clubShow" :key="count" cols="12" sm="6" md="4" lg="3" xl="3">
-              <div class="card" @click="entryClub(data)">
-                <div class="card-img-container">
-                  <img class="card-img-top" v-bind:src="data.img">
+              <div class="card">
+                <div class="card-button-remove" @click="clubRemoveActive(data)" v-if="user.permission >= 2">
+                  <i class="fas fa-times-circle"></i>
                 </div>
-                <div class="card-body">
-                  <h4 class="card-title">{{ data.name }}</h4>
-                  <p class="card-text">
-                    {{ data.desc || ' ไม่มีคำอธิบาย. '}}
-                  </p>
-                </div>
-                <div class="card-footer">
-                  <b-row class="m-0">
-                    <b-col class="p-0" cols="12" sm="12" md="12">
-                      ระดับชั้น:
-                      <span class="font-light">{{ data.receive == 'both' ? 'ทั้งหมด' : data.receive == 'junior' ? 'มัธยมต้น' : data.receive == 'senior' ? 'มันธยมปลาย' : '' }}</span>
-                    </b-col>
-                    <b-col class="p-0 mt-1" cols="12">
-                      <i class="fas fa-user fa-1x font-red" v-if="data.entry.current < data.entry.max"></i>
-                      <i class="fas fa-user-times fa-1x font-danger" v-else></i>
-                      <span :class="{'font-danger': data.entry.current >= data.entry.max}">{{ data.entry.current}} / {{ data.entry.max }}</span>
-                    </b-col>
-                  </b-row>
+                <div @click="entryClub(data)">
+                  <div class="card-img-container">
+                    <img class="card-img-top" v-bind:src="data.img">
+                  </div>
+                  <div class="card-body">
+                    <h4 class="card-title">{{ data.name }}</h4>
+                    <p class="card-text">
+                      {{ data.desc || ' ไม่มีคำอธิบาย. '}}
+                    </p>
+                  </div>
+                  <div class="card-footer">
+                    <b-row class="m-0">
+                      <b-col class="p-0" cols="12" sm="12" md="12">
+                        ระดับชั้น:
+                        <span class="font-light">{{ data.receive == 'both' ? 'ทั้งหมด' : data.receive == 'junior' ? 'มัธยมต้น' : data.receive == 'senior' ? 'มันธยมปลาย' : '' }}</span>
+                      </b-col>
+                      <b-col class="p-0 mt-1" cols="12">
+                        <i class="fas fa-user fa-1x font-red" v-if="data.entry.current < data.entry.max"></i>
+                        <i class="fas fa-user-times fa-1x font-danger" v-else></i>
+                        <span :class="{'font-danger': data.entry.current >= data.entry.max}">{{ data.entry.current}} / {{ data.entry.max }}</span>
+                      </b-col>
+                    </b-row>
+                  </div>
                 </div>
               </div>
             </b-col>
@@ -255,7 +271,13 @@ export default {
   methods: {
     ...mapGetters(['getClubAll', 'getClubRange', 'getLoading', 'getUser']),
     ...mapMutations(['halfLoadingChange']),
-    ...mapActions(['userUpdate', 'userSelf', 'clubUpdateCurrent', 'clubGet']),
+    ...mapActions([
+      'userUpdate',
+      'userSelf',
+      'clubUpdateCurrent',
+      'clubGet',
+      'clubRemove'
+    ]),
 
     // init club {
     initClub() {
@@ -267,6 +289,7 @@ export default {
         this.sort = null;
       }
     },
+
     // entry club {
     entryClub(data) {
       this.entry = data;
@@ -378,6 +401,8 @@ export default {
         this.sortTemp(this.sort);
       }
     },
+
+    // Filter Club
     filterTemp(select) {
       if (select) {
         // filter
@@ -412,6 +437,8 @@ export default {
         this.clubTemp = this.clubData;
       }
     },
+
+    // Sort Club
     sortTemp(select) {
       if (select) {
         // sort
@@ -437,7 +464,7 @@ export default {
       }
     },
 
-    // Sort //
+    // Sort Function //
     sort_new_old(a, b) {
       if (a.created_on > b.created_on) {
         return -1;
@@ -473,6 +500,58 @@ export default {
         return 1;
       }
       return 0;
+    },
+
+    // Remove Club
+    clubRemoveActive(data) {
+      swal({
+        type: 'warning',
+        title: 'ยืนยันการลบชุมนุม',
+        html:
+          'ต้องการลบชุมนุม <b class="font-bold">' +
+          data.name +
+          '</b> ใช่หรือไม่?',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'ใช่, ลบ',
+        cancelButtonText: 'ไม่, ยกเลิก'
+      }).then(result => {
+        if (result.value) {
+          // password confirm
+          swal({
+            type: 'warning',
+            title: 'ยืนยันรหัสผ่าน',
+            text: 'กรุณาใส่รหัสผ่านของคุณ',
+            input: 'password',
+            showCancelButton: true,
+            confirmButtonText: 'ยืนยัน',
+            showLoaderOnConfirm: true,
+            preConfirm: password => {
+              // password was wrong
+              if (this.user.profile.password != password) {
+                return swal({
+                  type: 'error',
+                  title: 'รหัสผ่านไม่ถูกต้อง'
+                });
+              } else {
+                this.clubRemove({
+                  name: data.name,
+                  token: this.user.token
+                }).then(response => {
+                  swal({
+                    type: 'success',
+                    title: 'ลบชุมนุมเสร็จสิ้น'
+                  });
+                  this.clubGet(this.user.token).then(response => {
+                    this.initClub();
+                  });
+                });
+              }
+            }
+          });
+        }
+      });
     }
   }
 };
