@@ -88,6 +88,9 @@
                   <b-btn class="bg-red" disabled v-if="entry.receive == 'junior' && user.profile.education.level >= 4">เฉพาะมัธยมต้น</b-btn>
                   <b-btn class="bg-red" disabled v-if="entry.receive == 'senior' && user.profile.education.level <= 3">เฉพาะมัธยมต้น</b-btn>
                 </div>
+                <div v-else-if="entry.entry.current >= entry.entry.max">
+                  <b-btn class="bg-red" disabled>จำนวนเต็มแล้ว</b-btn>
+                </div>
                 <div v-else>
                   <b-btn class="bg-red" @click="submitClub(entry)" v-if="!user.profile.club">ลงทะเบียนชุมนุม</b-btn>
                   <b-btn class="bg-red" disabled v-if="user.profile.club && user.profile.club != entry.name">นักเรียนได้ลงชุมนุม
