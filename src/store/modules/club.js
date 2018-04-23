@@ -128,7 +128,13 @@ const actions = {
           })
           // token expired
           .catch(err => {
-            router.push({ name: 'Logout' });
+            swal({
+              type: 'error',
+              title: 'ปฎิเสธการดำเนินการ',
+              text:
+                'มีผู้สมัครชุมนุมแทรก ระหว่างที่คุณกำลังดำเนินการ, กรุณารีเฟรชหน้า'
+            });
+            return reject();
           });
       }
     });

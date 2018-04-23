@@ -286,27 +286,32 @@ export default {
       }).then(result => {
         // confirm submit club
         if (result.value == true) {
-          this.userUpdate({ club: data.name }).then(response => {
-            swal({
-              type: 'success',
-              title: 'ลงทะเบียนเสร็จสิ้น',
-              html:
-                'นักเรียนได้ลงทะเบียนชุมนุม <b class="font-bold">' +
-                data.name +
-                '</b> แล้ว.',
-              timer: 2500
-            });
-          });
-          this.$refs.entry.hide();
           this.clubUpdateCurrent({
             name: data.name,
             amount: 1,
             token: this.user.token
-          });
-          this.userSelf(this.user.token);
-          this.clubGet(this.user.token).then(response => {
-            this.initClub();
-          });
+          })
+            .then(() => {
+              this.userUpdate({ club: data.name }).then(() => {
+                swal({
+                  type: 'success',
+                  title: 'ลงทะเบียนเสร็จสิ้น',
+                  html:
+                    'นักเรียนได้ลงทะเบียนชุมนุม <b class="font-bold">' +
+                    data.name +
+                    '</b> แล้ว.',
+                  timer: 2500
+                });
+                this.userSelf(this.user.token);
+                this.clubGet(this.user.token).then(response => {
+                  this.initClub();
+                });
+              });
+            })
+            .catch(() => {
+              this.initClub();
+            });
+          this.$refs.entry.hide();
         }
       });
     },
@@ -327,27 +332,28 @@ export default {
       }).then(result => {
         // confirm submit club
         if (result.value == true) {
-          this.userUpdate({ club: null }).then(response => {
-            swal({
-              type: 'success',
-              title: 'ออกจากชุมนุมเสร็จสิ้น',
-              html:
-                'นักเรียนได้ออกจากชุมนุม <b class="font-bold">' +
-                data.name +
-                '</b> แล้ว.',
-              timer: 2500
-            });
-          });
-          this.$refs.entry.hide();
           this.clubUpdateCurrent({
             name: data.name,
             amount: -1,
             token: this.user.token
+          }).then(() => {
+            this.userUpdate({ club: null }).then(() => {
+              swal({
+                type: 'success',
+                title: 'ออกจากชุมนุมเสร็จสิ้น',
+                html:
+                  'นักเรียนได้ออกจากชุมนุม <b class="font-bold">' +
+                  data.name +
+                  '</b> แล้ว.',
+                timer: 2500
+              });
+              this.userSelf(this.user.token);
+              this.clubGet(this.user.token).then(response => {
+                this.initClub();
+              });
+            });
           });
-          this.userSelf(this.user.token);
-          this.clubGet(this.user.token).then(response => {
-            this.initClub();
-          });
+          this.$refs.entry.hide();
         }
       });
     },
