@@ -12,7 +12,7 @@
         </b-col>
       </b-row>
       <div class="body">
-        <b-row class="club-profile m-0 mb-3">
+        <b-row class="club-profile m-0 mb-3" v-if="user.profile">
           <b-col class="text-right">{{ user.profile.prefix }}{{ user.profile.firstname}} {{ user.profile.lastname}} ( {{ user.studentId }} )
             <router-link :to="{name: 'Logout'}" class="font-danger">ออกจากระบบ</router-link>
           </b-col>
