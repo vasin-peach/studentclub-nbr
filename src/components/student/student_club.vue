@@ -530,10 +530,7 @@ export default {
             preConfirm: password => {
               // password was wrong
               if (this.user.profile.password != password) {
-                return swal({
-                  type: 'error',
-                  title: 'รหัสผ่านไม่ถูกต้อง'
-                });
+                swal.showValidationError('รหัสผ่านไม่ถูกต้อง');
               } else {
                 this.clubRemove({
                   name: data.name,
