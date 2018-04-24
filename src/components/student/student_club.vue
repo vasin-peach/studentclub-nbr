@@ -51,7 +51,7 @@
         <!-- Popup Entry Club -->
         <b-modal id="entry" ref="entry" hide-footer>
           <div v-if="entry && user">
-            <b-img-lazy blank-color="#6a011f" v-bind:src="'/static/clubs/' + entry.img" class="w-100 mb-3" style="object-fit: cover; object-position: center; min-height: 300px" />
+            <b-img blank-color="#6a011f" v-bind:src="'/static/clubs/' + entry.img" class="w-100 mb-3" style="object-fit: cover; object-position: center; min-height: 300px" />
             <b-row class="m-0">
               <b-col>
                 <p class="h2 font-bold">{{ entry.name }}</p>
