@@ -186,6 +186,74 @@ const actions = {
           reject();
         });
     });
+  },
+
+  // -- Add Club-- //
+  clubAdd({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      // check token exist
+      if (!data.token || !data.data) return reject();
+
+      // loading on
+      commit('halfLoadingChange', true);
+
+      // create request config
+      let config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Headers': 'x-access-token',
+          'x-access-token': data.token
+        },
+        timeout: 0
+      };
+
+      // create owner object
+      var ownerTemp = [];
+      for (var items in data.data.prefix) {
+        ownerTemp.push({
+          prefix: data.data.prefix[items],
+          firstname: data.data.firstname[items],
+          lastname: data.data.lastname[items]
+        });
+      }
+
+      // image to base 64
+      var reader = new FileReader();
+      reader.readAsDataURL(data.data.img);
+      reader.onloadend = function() {
+        var base64 = reader.result;
+        // create payload
+        let payload = {
+          entry: {
+            max: data.data.max
+          },
+          owner: ownerTemp,
+          receive: data.data.receive,
+          name: data.data.name,
+          img: base64,
+          desc: data.data.desc
+        };
+
+        // request to server
+        axios
+          .post(
+            window.location.protocol +
+              '//' +
+              window.location.host.split(':')[0] +
+              ':3000/api/club/add',
+            payload,
+            config
+          )
+          .then(response => {
+            resolve(response);
+            return commit('halfLoadingChange', false);
+          })
+          .catch(err => {
+            reject(err.response);
+            return commit('halfLoadingChange', false);
+          });
+      };
+    });
   }
 };
 

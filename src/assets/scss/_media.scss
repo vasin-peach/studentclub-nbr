@@ -30,3 +30,7 @@ $desktop-width: 1024px;
   justify-content: center;
   align-items: center;
 }
+
+.center {
+  @include center;
+}

@@ -2,20 +2,20 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import store from '../store';
 import axios from 'axios';
-
+// const Header = () =>
 // Layout route
-import layout from '@component/layout';
-import login from '@component/auth/login';
-import logout from '@component/auth/logout';
-import notfound from '@component/notfound';
+const layout = () => import('@component/layout');
+const login = () => import('@component/auth/login');
+const logout = () => import('@component/auth/logout');
+const notfound = () => import('@component/notfound');
 
 // Teacher route
-import teacher from '@component/teacher/teacher';
+const teacher = () => import('@component/teacher/teacher');
 
 // Student route
-import student from '@component/student/student';
-import student_club from '@component/student/student_club';
-import swal from 'sweetalert2';
+const student = () => import('@component/student/student');
+const student_club = () => import('@component/student/student_club');
+const swal = () => import('sweetalert2');
 
 Vue.use(Router);
 

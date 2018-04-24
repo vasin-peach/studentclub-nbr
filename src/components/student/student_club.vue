@@ -50,8 +50,8 @@
 
         <!-- Popup Entry Club -->
         <b-modal id="entry" ref="entry" hide-footer>
-          <div v-if="entry">
-            <img v-bind:src="entry.img" class="w-100 mb-3" style="object-fit: cover; object-position: center;">
+          <div v-if="entry && user">
+            <b-img-lazy blank-color="#6a011f" v-bind:src="'/static/clubs/' + entry.img" class="w-100 mb-3" style="object-fit: cover; object-position: center; min-height: 300px" />
             <b-row class="m-0">
               <b-col>
                 <p class="h2 font-bold">{{ entry.name }}</p>
@@ -114,6 +114,67 @@
         </b-modal>
 
         <!-- Popup Add Club -->
+        <b-modal id="add" ref="add" title="เพิ่มชุมนุม" size="lg" hide-footer v-if="user.profile">
+          <b-form @submit.prevent="addClubSubmit" v-if="user.profile.permission >= 2">
+            <b-form-group name="add_name" label="ชื่อชุมนุม" class="font-bold">
+              <b-form-input v-model="clubSubmit.name" v-validate="'required'" type="text" placeholder="ชื่อชุมนุม" required></b-form-input>
+            </b-form-group>
+            <b-form-group label="รายละเอียดชุมนุม" class="font-bold">
+              <b-form-textarea name="add_desc" v-validate="'required'" v-model="clubSubmit.desc" :rows="4" placeholder="รายละเอียดของชุมนุม" required></b-form-textarea>
+            </b-form-group>
+            <b-row>
+              <b-col>
+                <b-form-group label="จำนวนที่รับ" class="font-bold">
+                  <b-form-input name="add_max" v-validate="'required|numeric'" v-model="clubSubmit.max" type="number" placeholder="จำนวนนักเรียนที่รับ" required></b-form-input>
+                </b-form-group>
+              </b-col>
+              <b-col>
+                <b-form-group label="ชั้นที่รับ" class="font-bold">
+                  <b-form-select name="add_receive" v-validate="'required'" v-model="clubSubmit.receive" :options="receiveOptions" placholder="ชั้นปีที่รับ" required></b-form-select>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-form-group>
+              <span class="font-bold">ผู้รับผิดชอบ</span>
+              <span @click="clubOwnerInc(+1)">
+                <i class="fas fa-plus-circle font-blue"></i>
+              </span>
+              <span @click="clubOwnerInc(-1)">
+                <i class="fas fa-minus-circle font-danger"></i>
+              </span>
+              <hr>
+              <b-row v-for="item in clubOwnerNum" :key="item">
+                <b-col cols="12" sm="3">
+                  <b-form-group label="คำนำหน้าชื่อ">
+                    <b-form-input name="add_prefix" v-model="clubSubmit.prefix[item]" v-validate="'required'" placeholder="เช่น นาย นางสาว" required></b-form-input>
+                  </b-form-group>
+                </b-col>
+                <b-col>
+                  <b-form-group label="ชื่อจริง">
+                    <b-form-input name="add_firstname" v-model="clubSubmit.firstname[item]" v-validate="'required'" placeholder="เช่น สมศักดิ์" required></b-form-input>
+                  </b-form-group>
+                </b-col>
+                <b-col cols="12" sm="5">
+                  <b-form-group label="นามสกุล">
+                    <b-form-input name="add_lastname" v-model="clubSubmit.lastname[item]" v-validate="'required'" placeholder="เช่น สมใจหมาย" required></b-form-input>
+                  </b-form-group>
+                </b-col>
+                <b-col cols="12">
+                  <hr>
+                </b-col>
+              </b-row>
+            </b-form-group>
+            <b-form-group>
+              <span class="font-bold">รูปชุมนุม</span>
+              <b-form-file name="add_img" v-model="clubSubmit.img" accept=".jpg, .png, .gif" placeholder="เลือกภาพของคุณ..." class="mt-2" required></b-form-file>
+              <span v-show="errors.has('add_img')" class="fa-1x font-danger">{{ errors.first('add_img') }}</span>
+            </b-form-group>
+            <hr>
+            <div class="center">
+              <b-btn type="submit" class="font-center bg-red">เพิ่มชุมนุม</b-btn>
+            </div>
+          </b-form>
+        </b-modal>
 
         <!-- Button Add Club -->
         <div class="club-button-add" @click="clubAddActive()" v-if="user.permission >= 2">
@@ -132,7 +193,7 @@
                 </div>
                 <div @click="entryClub(data)">
                   <div class="card-img-container">
-                    <img class="card-img-top" v-bind:src="data.img">
+                    <b-img-lazy blank-color="#6a011f" class="card-img-top" v-bind:src="'/static/clubs/' + data.img" />
                   </div>
                   <div class="card-body">
                     <h4 class="card-title">{{ data.name }}</h4>
@@ -186,7 +247,20 @@
 
 <script>
 import { mapGetters, mapMutations, mapActions } from 'vuex';
+import { Validator } from 'vee-validate';
 import swal from 'sweetalert2';
+
+const messages = {
+  en: {
+    messages: {
+      digits: (name, val) => 'กรุณาใส่ตัวตัวเลขให้ครบ ' + val + ' ตัว',
+      numeric: () => 'จำเป็นต้องเป็นตัวเลขเท่านั้น',
+      required: () => 'กรุณากรอกข้อมูล'
+    }
+  }
+};
+Validator.localize(messages);
+
 export default {
   name: 'student_club',
 
@@ -209,7 +283,18 @@ export default {
       end: 12,
       timeout: null,
       entry: null,
-      edit: null
+      edit: null,
+      receiveOptions: [
+        { value: 'both', text: 'ทั้งมัธยมต้นและปลาย' },
+        { value: 'junior', text: 'เฉพาะมัธยมต้น' },
+        { value: 'senior', text: 'เฉพาะมัธยมปลาย' }
+      ],
+      clubOwnerNum: 1,
+      clubSubmit: {
+        prefix: {},
+        firstname: {},
+        lastname: {}
+      }
     };
   },
 
@@ -217,7 +302,7 @@ export default {
   // -- MOUNTED -- //
   // ------------- //
 
-  mounted() {
+  created() {
     this.initClub();
   },
 
@@ -287,7 +372,8 @@ export default {
       'userSelf',
       'clubUpdateCurrent',
       'clubGet',
-      'clubRemove'
+      'clubRemove',
+      'clubAdd'
     ]),
 
     // init club {
@@ -303,14 +389,72 @@ export default {
 
     // entry club {
     entryClub(data) {
-      this.entry = data;
-      this.$refs.entry.show();
+      if (data) {
+        this.entry = data;
+        this.$refs.entry.show();
+      }
     },
 
     // edit club
     clubEditActive(data) {
-      this.edit = data;
-      this.$refs.edit.show();
+      if (data) {
+        this.edit = data;
+        this.$refs.edit.show();
+      }
+    },
+
+    // club add
+    clubAddActive() {
+      this.$refs.add.show();
+    },
+    clubOwnerInc(amount) {
+      if (this.clubOwnerNum + amount > 0) {
+        this.clubOwnerNum += amount;
+      }
+    },
+
+    addClubSubmit() {
+      this.$validator.validateAll().then(result => {
+        this.clubAdd({ data: this.clubSubmit, token: this.user.token })
+          .then(response => {
+            this.clubGet(this.user.token).then(response => {
+              this.initClub();
+            });
+            this.$refs.add.hide();
+            swal({
+              type: 'success',
+              title: 'เพิ่มชุมนุมเสร็จสิ้น',
+              html:
+                'ชุมนุม <b class="font-bold">' +
+                this.clubSubmit.name +
+                '</b> ได้ถูกเพิ่มแล้ว.',
+              timer: 2500
+            }).then(() => {
+              this.clubOwnerNum = 1;
+              this.clubSubmit = {
+                prefix: {},
+                firstname: {},
+                lastname: {}
+              };
+            });
+          })
+          .catch(err => {
+            if (err.data.message == 'Failed to create club. Club has exist.') {
+              swal({
+                type: 'error',
+                title: 'ไม่สามารถเพิ่มชุมนุมได้',
+                html:
+                  'ชื่อชุมนุม <b class="font-bold">' +
+                  this.clubSubmit.name +
+                  '</b> ได้ถูกใช้ไปแล้ว กรุณาลองชื่ออื่น.'
+              });
+            }
+            this.clubGet(this.user.token).then(response => {
+              this.initClub();
+            });
+            this.$refs.add.hide();
+          });
+      });
     },
 
     // submit club
