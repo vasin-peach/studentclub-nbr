@@ -117,6 +117,9 @@
           <transition-group name="club" class="club-block row m-0" tag="div" v-if="!getLoading().half && clubTemp != 'notfound'">
             <b-col class="club-item" v-for="(data, count) in clubShow" :key="count" cols="12" sm="6" md="4" lg="3" xl="3">
               <div class="card">
+                <div class="card-button-edit" @click="clubEditActive(data)" v-if="user.permission >= 2">
+                  <i class="fas fa-pen-square"></i>
+                </div>
                 <div class="card-button-remove" @click="clubRemoveActive(data)" v-if="user.permission >= 2">
                   <i class="fas fa-times-circle"></i>
                 </div>

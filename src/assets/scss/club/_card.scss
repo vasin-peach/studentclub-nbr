@@ -27,7 +27,8 @@
         min-height: 150px;
       }
     }
-    .card-button-remove {
+    .card-button-remove,
+    .card-button-edit {
       cursor: pointer;
       z-index: 1;
       border-radius: 50%;
@@ -36,17 +37,56 @@
       top: 0;
       height: 20px;
       width: 20px;
-      transform: translate(7px, -7px);
+      transform: translate(10px, -7px);
       background-color: $color-white;
       box-shadow: none;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease,
+        text-shadow 0.3s ease;
+      @include small {
+        height: 30px;
+        width: 30px;
+        transform: translate(10px, -10px);
+      }
       i {
         font-size: 20px;
         color: $color-danger;
+        @include small {
+          font-size: 30px;
+        }
       }
       &:hover {
-        transform: translate(7px, -9px);
+        transform: translate(10px, -9px);
         box-shadow: 0 1px 5px rgba($color-dark, $alpha: 0.5);
+        @include small {
+          transform: translate(10px, -12px);
+        }
+      }
+    }
+    .card-button-edit {
+      transform: translate(-16px, -7px);
+      background-color: rgba($color-white, $alpha: 1);
+      border-radius: 0px;
+      height: 17px;
+      width: 17px;
+      @include small {
+        height: 26px;
+        width: 26px;
+        transform: translate(-28px, -10px);
+      }
+      i {
+        color: $color-blue;
+        font-size: 20px;
+        @include small {
+          font-size: 30px;
+        }
+      }
+      &:hover {
+        box-shadow: none;
+        text-shadow: 0 1px 5px rgba($color-dark, $alpha: 0.5);
+        transform: translate(-16px, -9px);
+        @include small {
+          transform: translate(-28px, -12px);
+        }
       }
     }
   }
