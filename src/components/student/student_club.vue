@@ -86,13 +86,6 @@
                 <i class="fas fa-user-times fa-1x font-danger" v-else></i><hr>
               </b-col>
             </b-row>
-            <!-- <b-row class="m-0" v-if="user.permission >= 2">
-              <b-col>
-                <span class="font-danger">ลบชุมนุม</span>
-                <span class="font-red">แก้ไขชุมนุม</span>
-                <hr>
-              </b-col>
-            </b-row> -->
             <b-row class="m-0 p-3">
               <b-col class="text-center">
                 <div v-if="entry.receive == 'junior' || entry.recieve == 'senior'">
@@ -112,6 +105,20 @@
             </b-row>
           </div>
         </b-modal>
+
+        <!-- Popup Edit Club -->
+        <b-modal id="edit" ref="edit" title="แก้ไขชุมนุม" hide-footer>
+          <div v-if="edit">
+            {{ edit }}
+          </div>
+        </b-modal>
+
+        <!-- Popup Add Club -->
+
+        <!-- Button Add Club -->
+        <div class="club-button-add" @click="clubAddActive()" v-if="user.permission >= 2">
+          <i class="fas fa-plus-circle"></i>
+        </div>
 
         <transition name="app-fade" mode="out-in">
           <transition-group name="club" class="club-block row m-0" tag="div" v-if="!getLoading().half && clubTemp != 'notfound'">
@@ -201,7 +208,8 @@ export default {
       start: 0,
       end: 12,
       timeout: null,
-      entry: null
+      entry: null,
+      edit: null
     };
   },
 
@@ -297,6 +305,12 @@ export default {
     entryClub(data) {
       this.entry = data;
       this.$refs.entry.show();
+    },
+
+    // edit club
+    clubEditActive(data) {
+      this.edit = data;
+      this.$refs.edit.show();
     },
 
     // submit club
