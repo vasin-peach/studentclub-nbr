@@ -121,12 +121,12 @@ router.beforeEach((to, from, next) => {
       }
     }
 
-    // request club data
-    if (to.fullPath.split('/').indexOf('student') > 0) {
-      if (!store.getters.getClubAll) {
-        store.dispatch('clubGet', userState.token);
-      }
-    }
+    // // request club data
+    // if (to.fullPath.split('/').indexOf('student') > 0) {
+    //   if (!store.getters.getClubAll) {
+    //     store.dispatch('clubGet', userState.token);
+    //   }
+    // }
   });
 });
 

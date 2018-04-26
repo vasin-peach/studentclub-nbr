@@ -6,9 +6,6 @@
 @import './auth/main.scss';
 @import './club/main.scss';
 
-// .font-roboto {
-//   font-family: 'Roboto Slab', 'Kanit', sans-seri !important;
-// }
 * {
   padding: 0;
   margin: 0;
@@ -18,13 +15,17 @@
     text-decoration: none;
     color: $color-base;
   }
-  body {
+  body:not(.modal-open) {
     padding-right: 0px !important;
-    &.modal-open {
-      padding-right: 17px !important;
-      @include mobile {
-        padding-right: 0px !important;
-      }
+  }
+}
+
+// fix add club button position when modal open
+body.modal-open {
+  .club-button-add {
+    margin-right: 17px !important;
+    @include small {
+      margin-right: 0px !important;
     }
   }
 }

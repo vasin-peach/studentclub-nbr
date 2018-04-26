@@ -303,7 +303,9 @@ export default {
   // ------------- //
 
   created() {
-    this.initClub();
+    this.clubGet(this.user.token).then(result => {
+      this.initClub();
+    });
   },
 
   // ----------- //
@@ -452,7 +454,6 @@ export default {
             this.clubGet(this.user.token).then(response => {
               this.initClub();
             });
-            this.$refs.add.hide();
           });
       });
     },
@@ -696,15 +697,27 @@ export default {
                 this.clubRemove({
                   name: data.name,
                   token: this.user.token
-                }).then(response => {
-                  swal({
-                    type: 'success',
-                    title: 'ลบชุมนุมเสร็จสิ้น'
+                })
+                  .then(response => {
+                    swal({
+                      type: 'success',
+                      title: 'ลบชุมนุมเสร็จสิ้น'
+                    });
+                    this.clubGet(this.user.token).then(response => {
+                      this.initClub();
+                    });
+                  })
+                  .catch(err => {
+                    swal({
+                      type: 'error',
+                      title: 'ไม่สามารถลบได้',
+                      text:
+                        'ข้อมูลหรือภาพของชุมนุมนี้อาจไม่มีอยู่จริง กรุณาติดต่อผู้ดูแลระบบ.'
+                    });
+                    this.clubGet(this.user.token).then(response => {
+                      this.initClub();
+                    });
                   });
-                  this.clubGet(this.user.token).then(response => {
-                    this.initClub();
-                  });
-                });
               }
             }
           });
