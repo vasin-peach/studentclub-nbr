@@ -103,7 +103,7 @@ router.beforeEach((to, from, next) => {
     // user state
     var userState = store.getters.getUser;
 
-    store.dispatch('userSelf', userState.token);
+    store.dispatch('userSelf', userState.token).catch();
 
     // reuqest not login
     if (to.matched.some(record => record.meta.noAuth)) {
