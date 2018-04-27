@@ -23,7 +23,9 @@
 
 // fix add club button position when modal open
 body.modal-open {
-  .club-button-add {
+  .club-button-add,
+  .user-button-link,
+  .panel-button-link {
     margin-right: 17px !important;
     @include small {
       margin-right: 0px !important;

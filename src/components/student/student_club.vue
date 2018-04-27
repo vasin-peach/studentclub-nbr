@@ -170,7 +170,20 @@
         <!-- Button Add Club -->
         <div class="club-button-add" @click="clubAddActive()" v-if="user.permission >= 2">
           <i class="fas fa-plus-circle"></i>
+          <div class="button-text">เพิ่ม</div>
         </div>
+
+        <!-- Button Link User -->
+        <router-link :to="{ name: 'Teacher_User'}" class="user-button-link" v-if="user.permission >= 2">
+          <i class="fas fa-user-circle"></i>
+          <div class="button-text">นักเรียน</div>
+        </router-link>
+
+        <!-- Button Link Panel -->
+        <router-link :to="{ name: 'Teacher_Club'}" class="panel-button-link" v-if="user.permission >= 2">
+          <i class="fas fa-globe"></i>
+          <div class="button-text">ชุมนุม</div>
+        </router-link>
 
         <transition name="app-fade" mode="out-in">
           <transition-group name="club" class="club-block row m-0" tag="div" v-if="!getLoading().half && clubTemp != 'notfound' && clubTemp !='empty'">
