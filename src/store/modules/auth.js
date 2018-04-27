@@ -244,9 +244,6 @@ const actions = {
       // check token exist
       if (!token) return reject();
 
-      // turn on loading
-      commit('halfLoadingChange', true);
-
       // create request config
       var config = {
         headers: {
@@ -270,12 +267,11 @@ const actions = {
         .then(response => {
           if (response.status == 200) {
             commit('updateUserProfile', response.data.data);
-            commit('halfLoadingChange', false);
             return resolve(response);
-          } else {
-            commit('halfLoadingChange', false);
-            return reject();
           }
+        })
+        .catch(err => {
+          return reject(err.response);
         });
     });
   }

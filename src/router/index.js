@@ -2,7 +2,8 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import store from '../store';
 import axios from 'axios';
-// const Header = () =>
+import jwtDecode from 'jwt-decode';
+
 // Layout route
 const layout = () => import('@component/layout');
 const login = () => import('@component/auth/login');
@@ -58,14 +59,14 @@ const router = new Router({
               name: 'Student_Club'
             }
           ]
+        },
+        // TEACHER
+        {
+          path: '/teacher',
+          component: teacher,
+          meta: { auth: true, teacher: true },
+          children: []
         }
-        // // TEACHER
-        // {
-        //   path: '/teacher',
-        //   component: teacher,
-        //   // meta: { auth: true },
-        //   children: []
-        // }
       ]
     }
   ]
@@ -103,7 +104,7 @@ router.beforeEach((to, from, next) => {
     // user state
     var userState = store.getters.getUser;
 
-    store.dispatch('userSelf', userState.token).catch();
+    store.dispatch('userSelf', userState.token).catch(err => {});
 
     // reuqest not login
     if (to.matched.some(record => record.meta.noAuth)) {
@@ -121,12 +122,13 @@ router.beforeEach((to, from, next) => {
       }
     }
 
-    // // request club data
-    // if (to.fullPath.split('/').indexOf('student') > 0) {
-    //   if (!store.getters.getClubAll) {
-    //     store.dispatch('clubGet', userState.token);
-    //   }
-    // }
+    // request teacher (permission >= 2)
+    if (to.matched.some(record => record.meta.teacher)) {
+      if (jwtDecode(userState.token).permission < 2) {
+        next({ name: 'Student_Club' });
+        return;
+      }
+    }
   });
 });
 
