@@ -11,7 +11,8 @@ const logout = () => import('@component/auth/logout');
 const notfound = () => import('@component/notfound');
 
 // Teacher route
-const teacher = () => import('@component/teacher/teacher');
+const Teacher = () => import('@component/teacher/Teacher');
+const Teacher_User = () => import('@component/teacher/User');
 
 // Student route
 const student = () => import('@component/student/student');
@@ -56,16 +57,24 @@ const router = new Router({
             {
               path: 'club',
               component: student_club,
-              name: 'Student_Club'
+              name: 'Student_Club',
+              alias: '/'
             }
           ]
         },
         // TEACHER
         {
           path: '/teacher',
-          component: teacher,
+          component: Teacher,
           meta: { auth: true, teacher: true },
-          children: []
+          children: [
+            {
+              path: 'user',
+              component: Teacher_User,
+              name: 'Teacher_User',
+              alias: '/'
+            }
+          ]
         }
       ]
     }

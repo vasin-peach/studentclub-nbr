@@ -1,7 +1,7 @@
 <template>
   <div id="app-student-club">
     <div class="club-container">
-      <headerContainer></headerContainer>
+
       <div class="body">
         <b-row class="club-profile m-0 mb-3" v-if="user.profile">
           <b-col class="text-right">{{ user.profile.prefix }}{{ user.profile.firstname}} {{ user.profile.lastname}} ( {{ user.studentId }} )
@@ -240,7 +240,6 @@
 import { mapGetters, mapMutations, mapActions } from 'vuex';
 import { Validator } from 'vee-validate';
 import swal from 'sweetalert2';
-import headerContainer from '../layout/Header';
 
 const messages = {
   en: {
@@ -255,14 +254,6 @@ Validator.localize(messages);
 
 export default {
   name: 'student_club',
-
-  // -------------- //
-  // -- TEMPLATE -- //
-  // -------------- //
-
-  components: {
-    headerContainer
-  },
 
   // ---------- //
   // -- DATA -- //

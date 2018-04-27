@@ -1,13 +1,22 @@
 <template>
   <div class="teacher">
-    Teacher App
+    <headerContainer></headerContainer>
     <router-view/>
   </div>
 </template>
 
 <script>
+import headerContainer from '../layout/Header';
 export default {
-  name: 'teacher'
+  name: 'Teacher',
+
+  // -------------- //
+  // -- TEMPLATE -- //
+  // -------------- //
+
+  components: {
+    headerContainer
+  }
 };
 </script>
 
