@@ -80,7 +80,8 @@ const actions = {
         })
         // token expired
         .catch(err => {
-          router.push({ name: 'Logout' });
+          reject(err.response);
+          // router.push({ name: 'Logout' });
         });
     });
   },

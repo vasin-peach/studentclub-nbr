@@ -182,7 +182,7 @@
         </div>
 
         <transition name="app-fade" mode="out-in">
-          <transition-group name="club" class="club-block row m-0" tag="div" v-if="!getLoading().half && clubTemp != 'notfound'">
+          <transition-group name="club" class="club-block row m-0" tag="div" v-if="!getLoading().half && clubTemp != 'notfound' && clubTemp !='empty'">
             <b-col class="club-item" v-for="(data, count) in clubShow" :key="count" cols="12" sm="6" md="4" lg="3" xl="3">
               <div class="card">
                 <div class="card-button-edit" @click="clubEditActive(data)" v-if="user.permission >= 2">
@@ -221,7 +221,7 @@
 
           <div class="loading-half-wrapper" v-else>
             <div class="loading-half-fade">
-              <div v-if="clubTemp == 'notfound'" class="text-center">
+              <div v-if="clubTemp == 'notfound' || clubTemp == 'empty'" class="text-center">
                 <i class="fas fa-exclamation-circle fa-3x mb-1"></i> <br> ไม่พบข้อมูล
               </div>
               <div class="loading-half-block" v-else>
@@ -303,9 +303,14 @@ export default {
   // ------------- //
 
   created() {
-    this.clubGet(this.user.token).then(result => {
-      this.initClub();
-    });
+    this.clubGet(this.user.token)
+      .then(result => {
+        this.initClub();
+      })
+      .catch(err => {
+        this.clubData = 'empty';
+        this.clubTemp = 'empty';
+      });
   },
 
   // ----------- //
@@ -441,16 +446,14 @@ export default {
             });
           })
           .catch(err => {
-            if (err.data.message == 'Failed to create club. Club has exist.') {
-              swal({
-                type: 'error',
-                title: 'ไม่สามารถเพิ่มชุมนุมได้',
-                html:
-                  'ชื่อชุมนุม <b class="font-bold">' +
-                  this.clubSubmit.name +
-                  '</b> ได้ถูกใช้ไปแล้ว กรุณาลองชื่ออื่น.'
-              });
-            }
+            swal({
+              type: 'error',
+              title: 'ไม่สามารถเพิ่มชุมนุมได้',
+              html:
+                'ชื่อชุมนุม <b class="font-bold">' +
+                this.clubSubmit.name +
+                '</b> ได้ถูกใช้ไปแล้ว กรุณาลองชื่ออื่น.'
+            });
             this.clubGet(this.user.token).then(response => {
               this.initClub();
             });
