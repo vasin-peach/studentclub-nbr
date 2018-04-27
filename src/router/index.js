@@ -13,6 +13,7 @@ const notfound = () => import('@component/notfound');
 // Teacher route
 const Teacher = () => import('@component/teacher/Teacher');
 const Teacher_User = () => import('@component/teacher/User');
+const Teacher_Club = () => import('@component/teacher/Club');
 
 // Student route
 const student = () => import('@component/student/student');
@@ -73,6 +74,11 @@ const router = new Router({
               component: Teacher_User,
               name: 'Teacher_User',
               alias: '/'
+            },
+            {
+              path: 'club',
+              component: Teacher_Club,
+              name: 'Teacher_Club'
             }
           ]
         }
