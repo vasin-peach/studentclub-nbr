@@ -1,16 +1,7 @@
 <template>
   <div id="app-student-club">
     <div class="club-container">
-      <b-row class="header ml-0 mr-0">
-        <b-col>
-          <div class="brand mr-2">
-            <img src="/static/imgs/icon.png">
-          </div>
-          <div class="font-white">
-            ระบบลงทะเบียนชุมนุมออนไลน์
-          </div>
-        </b-col>
-      </b-row>
+      <headerContainer></headerContainer>
       <div class="body">
         <b-row class="club-profile m-0 mb-3" v-if="user.profile">
           <b-col class="text-right">{{ user.profile.prefix }}{{ user.profile.firstname}} {{ user.profile.lastname}} ( {{ user.studentId }} )
@@ -249,6 +240,7 @@
 import { mapGetters, mapMutations, mapActions } from 'vuex';
 import { Validator } from 'vee-validate';
 import swal from 'sweetalert2';
+import headerContainer from '../layout/Header';
 
 const messages = {
   en: {
@@ -263,6 +255,14 @@ Validator.localize(messages);
 
 export default {
   name: 'student_club',
+
+  // -------------- //
+  // -- TEMPLATE -- //
+  // -------------- //
+
+  components: {
+    headerContainer
+  },
 
   // ---------- //
   // -- DATA -- //
