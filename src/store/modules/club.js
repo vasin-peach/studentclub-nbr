@@ -180,11 +180,11 @@ const actions = {
           if (response.data.code == 200) {
             resolve(response);
           } else {
-            reject();
+            reject(response);
           }
         })
-        .catch(() => {
-          reject();
+        .catch(err => {
+          reject(err);
         });
     });
   },

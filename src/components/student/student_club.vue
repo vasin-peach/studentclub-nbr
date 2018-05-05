@@ -733,12 +733,23 @@ export default {
                     });
                   })
                   .catch(err => {
-                    swal({
-                      type: 'error',
-                      title: 'ไม่สามารถลบได้',
-                      text:
-                        'ข้อมูลหรือภาพของชุมนุมนี้อาจไม่มีอยู่จริง กรุณาติดต่อผู้ดูแลระบบ.'
-                    });
+                    if (
+                      err.response.data.message ==
+                      'request duplicate data not found in db.'
+                    ) {
+                      swal({
+                        type: 'warning',
+                        title: 'ไม่สามารถลบได้',
+                        text: 'ชุมนุมนี้ได้ถูกลบไปแล้วโดยอาจารย์ท่านอื่น.'
+                      });
+                    } else {
+                      swal({
+                        type: 'error',
+                        title: 'ไม่สามารถลบได้',
+                        text:
+                          'ข้อมูลหรือภาพของชุมนุมนี้อาจไม่มีอยู่จริง กรุณาติดต่อผู้ดูแลระบบ.'
+                      });
+                    }
                     this.clubGet(this.user.token).then(response => {
                       this.initClub();
                     });
