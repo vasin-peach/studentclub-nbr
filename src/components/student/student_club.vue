@@ -3,7 +3,7 @@
     <div class="club-container">
 
       <div class="body">
-        <b-row class="club-profile m-0 mb-3" v-if="user.profile">
+        <!-- <b-row class="club-profile m-0 mb-3" v-if="user.profile">
           <b-col class="text-right">
             {{ user.profile.prefix }}{{ user.profile.firstname}} {{ user.profile.lastname}} (
             <span class="font-red" v-if="user.permission >= 2">Teacher Mode </span>
@@ -11,7 +11,7 @@
             )
             <router-link :to="{name: 'Logout'}" class="font-danger">ออกจากระบบ</router-link>
           </b-col>
-        </b-row>
+        </b-row> -->
         <b-row class="club-header m-0 mb-3">
           <b-col class="club-search mb-2" cols="12" sm="6" md="4" lg="6">
             <b-form @submit.prevent="searchClub(search)">
