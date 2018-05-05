@@ -1,12 +1,25 @@
 <template>
   <div id="teacher_user">
-    Teacher _ User
+    <!-- Button Link Main -->
+    <router-link :to="{ name: 'Student_Club'}" class="main-button-link" v-if="user.permission >= 2">
+      <i class="fas fa-chevron-circle-left"></i>
+      <div class="button-text">หน้าหลัก</div>
+    </router-link>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
-  name: 'Teacher_User'
+  name: 'Teacher_User',
+  data() {
+    return {
+      user: this.getUser()
+    };
+  },
+  methods: {
+    ...mapGetters(['getUser'])
+  }
 };
 </script>
 
