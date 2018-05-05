@@ -50,10 +50,6 @@
             <b-row class="m-0">
               <b-col>
                 <p class="h2 font-bold">{{ entry.name }}</p>
-                <div v-if="user.permission >= 2">
-                  <span class="font-success">แก้ไขชุมนุม</span>
-                  <span class="font-danger">ลบชุมนุม</span>
-                </div>
               </b-col>
             </b-row>
             <b-row class="m-0">
@@ -318,7 +314,8 @@ export default {
       clubSubmit: {
         prefix: {},
         firstname: {},
-        lastname: {}
+        lastname: {},
+        receive: 'both'
       }
     };
   },
