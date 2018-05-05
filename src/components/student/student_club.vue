@@ -128,7 +128,7 @@
               <b-form-input v-model="clubSubmit.name" v-validate="'required'" type="text" placeholder="ชื่อชุมนุม" required></b-form-input>
             </b-form-group>
             <b-form-group label="รายละเอียดชุมนุม" class="font-bold">
-              <b-form-textarea name="add_desc" v-validate="'required'" v-model="clubSubmit.desc" :rows="4" placeholder="รายละเอียดของชุมนุม" required></b-form-textarea>
+              <b-form-textarea name="add_desc" v-model="clubSubmit.desc" :rows="4" placeholder="รายละเอียดของชุมนุม (กรอกหรือไม่กรอกก็ได้)"></b-form-textarea>
             </b-form-group>
             <b-row>
               <b-col>
@@ -463,7 +463,8 @@ export default {
               this.clubSubmit = {
                 prefix: {},
                 firstname: {},
-                lastname: {}
+                lastname: {},
+                receive: 'both'
               };
             });
           })
