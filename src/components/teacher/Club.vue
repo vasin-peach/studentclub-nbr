@@ -5,6 +5,7 @@
       <i class="fas fa-chevron-circle-left"></i>
       <div class="button-text">หน้าหลัก</div>
     </router-link>
+    {{ getClubList() }}
   </div>
 </template>
 
@@ -18,7 +19,7 @@ export default {
     };
   },
   methods: {
-    ...mapGetters(['getUser'])
+    ...mapGetters(['getUser', 'getClubList'])
   }
 };
 </script>

@@ -16,21 +16,43 @@ var config = {
 
 
 // initial state
-const state = {};
+const state = {
+  userList: null,
+  clubList: null
+};
 
 // getters
-const getters = {};
+const getters = {
+  getUserList: state => state.userList,
+  getClubList: state => state.clubList,
+};
 
 // mutations
-const mutations = {};
+const mutations = {
+  updateUserList(state, data) {
+    if (data) {
+      state.userList = data;
+    } else {
+      state.userList = null;
+    }
+  },
+  updateClubList(state, data) {
+    if (data) {
+      state.clubList = data;
+    } else {
+      state.clubList = null;
+    }
+  }
+};
 
 // actions
 const actions = {
 
   // Request All User
-  reqtAllUser({
+  reqAllUser({
     commit
   }, token) {
+
     return new Promise((resolve, reject) => {
       // loading
       commit('fullLoadingChange', true);
@@ -47,9 +69,15 @@ const actions = {
       //create request
       axios
         .post(
-          window.location.protocol + '//' + window.location.host.split(':')[0] + ':3000/api/teacher/user/all', '', config
+          window.location.protocol + '//' + window.location.host.split(':')[0] + ':3000/api/teacher/user/all', {
+            token: token
+          }, config
         )
         .then(response => {
+          // update all userlist in local
+          commit('updateUserList', response.data.users);
+
+          // disable loading
           commit('fullLoadingChange', false);
           return resolve(response);
         })
@@ -80,9 +108,15 @@ const actions = {
       //create request
       axios
         .post(
-          window.location.protocol + '//' + window.location.host.split(':')[0] + ':3000/api/teacher/club/all', '', config
+          window.location.protocol + '//' + window.location.host.split(':')[0] + ':3000/api/teacher/club/all', {
+            token: token
+          }, config
         )
         .then(response => {
+          // update all clublist in local
+          commit('updateClubList', response.data.clubs);
+
+          // disable loading
           commit('fullLoadingChange', false);
           return resolve(response);
         })

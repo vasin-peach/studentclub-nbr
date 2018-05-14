@@ -5,86 +5,100 @@ import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 
 // Layout route
-const layout = () => import('@component/layout');
-const login = () => import('@component/auth/login');
-const logout = () => import('@component/auth/logout');
-const notfound = () => import('@component/notfound');
+const layout = () =>
+  import ('@component/layout');
+const login = () =>
+  import ('@component/auth/login');
+const logout = () =>
+  import ('@component/auth/logout');
+const notfound = () =>
+  import ('@component/notfound');
 
 // Teacher route
-const Teacher = () => import('@component/teacher/Teacher');
-const Teacher_User = () => import('@component/teacher/User');
-const Teacher_Club = () => import('@component/teacher/Club');
+const Teacher = () =>
+  import ('@component/teacher/Teacher');
+const Teacher_User = () =>
+  import ('@component/teacher/User');
+const Teacher_Club = () =>
+  import ('@component/teacher/Club');
 
 // Student route
-const student = () => import('@component/student/student');
-const student_club = () => import('@component/student/student_club');
-const swal = () => import('sweetalert2');
+const student = () =>
+  import ('@component/student/student');
+const student_club = () =>
+  import ('@component/student/student_club');
+const swal = () =>
+  import ('sweetalert2');
 
 Vue.use(Router);
 
 const router = new Router({
   mode: 'history',
-  routes: [
-    {
-      path: '/',
-      component: layout,
-      children: [
-        // Notfound
-        {
-          path: '/404',
-          component: notfound,
-          name: 'Notfound'
-        },
-        // AUTH
-        {
-          path: '/login',
-          component: login,
-          name: 'Login',
-          alias: '/',
-          meta: { noAuth: true }
-        },
-        {
-          path: '/logout',
-          component: logout,
-          name: 'Logout',
-          meta: { auth: true }
-        },
-        // STUDENT
-        {
-          path: '/student',
-          component: student,
-          meta: { auth: true },
-          children: [
-            {
-              path: 'club',
-              component: student_club,
-              name: 'Student_Club',
-              alias: '/'
-            }
-          ]
-        },
-        // TEACHER
-        {
-          path: '/teacher',
-          component: Teacher,
-          meta: { auth: true, teacher: true },
-          children: [
-            {
-              path: 'user',
-              component: Teacher_User,
-              name: 'Teacher_User',
-              alias: '/'
-            },
-            {
-              path: 'club',
-              component: Teacher_Club,
-              name: 'Teacher_Club'
-            }
-          ]
+  routes: [{
+    path: '/',
+    component: layout,
+    children: [
+      // Notfound
+      {
+        path: '/404',
+        component: notfound,
+        name: 'Notfound'
+      },
+      // AUTH
+      {
+        path: '/login',
+        component: login,
+        name: 'Login',
+        alias: '/',
+        meta: {
+          noAuth: true
         }
-      ]
-    }
-  ]
+      },
+      {
+        path: '/logout',
+        component: logout,
+        name: 'Logout',
+        meta: {
+          auth: true
+        }
+      },
+      // STUDENT
+      {
+        path: '/student',
+        component: student,
+        meta: {
+          auth: true
+        },
+        children: [{
+          path: 'club',
+          component: student_club,
+          name: 'Student_Club',
+          alias: '/'
+        }]
+      },
+      // TEACHER
+      {
+        path: '/teacher',
+        component: Teacher,
+        meta: {
+          auth: true,
+          teacher: true
+        },
+        children: [{
+            path: 'user',
+            component: Teacher_User,
+            name: 'Teacher_User',
+            alias: '/'
+          },
+          {
+            path: 'club',
+            component: Teacher_Club,
+            name: 'Teacher_Club'
+          }
+        ]
+      }
+    ]
+  }]
 });
 
 // ------------------ //
@@ -93,7 +107,9 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   // check path exist
-  to.matched.length ? next() : next({ name: 'Notfound' });
+  to.matched.length ? next() : next({
+    name: 'Notfound'
+  });
 
   // request session token every router update
   store.dispatch('session').then(response => {
@@ -110,7 +126,9 @@ router.beforeEach((to, from, next) => {
             timer: 3000
           }).then(() => {
             store.dispatch('logout');
-            router.push({ name: 'Login' });
+            router.push({
+              name: 'Login'
+            });
             return;
           });
         });
@@ -124,7 +142,9 @@ router.beforeEach((to, from, next) => {
     // reuqest not login
     if (to.matched.some(record => record.meta.noAuth)) {
       if (userState.token) {
-        next({ name: 'Student_Club' });
+        next({
+          name: 'Student_Club'
+        });
         return;
       }
     }
@@ -132,7 +152,9 @@ router.beforeEach((to, from, next) => {
     // request login
     if (to.matched.some(record => record.meta.auth)) {
       if (!userState.token) {
-        next({ name: 'Login' });
+        next({
+          name: 'Login'
+        });
         return;
       }
     }
@@ -140,9 +162,31 @@ router.beforeEach((to, from, next) => {
     // request teacher (permission >= 2)
     if (to.matched.some(record => record.meta.teacher)) {
       if (jwtDecode(userState.token).permission < 2) {
-        next({ name: 'Student_Club' });
+        next({
+          name: 'Student_Club'
+        });
         return;
       }
+    }
+
+    // request user list when entry Teacher_User
+    if (to.path.indexOf('teacher') >= 1 && to.path.indexOf('user') >= 1) {
+
+      // check userlist is exist ignore
+      if (store.getters.getUserList) return false;
+
+      // call actions
+      store.dispatch('reqAllUser', userState.token);
+    }
+
+    // request user list when entry Teacher_Club
+    if (to.path.indexOf('teacher') >= 1 && to.path.indexOf('club') >= 1) {
+
+      // check clublist is exist ignore
+      if (store.getters.getClubList) return false;
+
+      // call actions
+      store.dispatch('reqAllClub', userState.token);
     }
   });
 });

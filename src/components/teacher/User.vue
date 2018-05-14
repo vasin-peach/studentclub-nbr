@@ -5,6 +5,7 @@
       <i class="fas fa-chevron-circle-left"></i>
       <div class="button-text">หน้าหลัก</div>
     </router-link>
+    {{ getUserList() }}
   </div>
 </template>
 
@@ -12,13 +13,23 @@
 import { mapGetters } from 'vuex';
 export default {
   name: 'Teacher_User',
+
+  // ---------- //
+  // -- DATA -- //
+  // ---------- //
+
   data() {
     return {
       user: this.getUser()
     };
   },
+
+  // ------------- //
+  // -- METHODS -- //
+  // ------------- //
+
   methods: {
-    ...mapGetters(['getUser'])
+    ...mapGetters(['getUser', 'getUserList'])
   }
 };
 </script>
