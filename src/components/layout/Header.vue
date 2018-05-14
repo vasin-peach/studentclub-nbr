@@ -5,9 +5,9 @@
         <div class="brand mr-2">
           <img src="/static/imgs/icon.png">
         </div>
-        <div class="font-white">
+        <router-link :to="{ name: 'Student_Club'}" class="font-white decoration-none">
           ระบบลงทะเบียนชุมนุมออนไลน์
-        </div>
+        </router-link>
       </b-col>
     </b-row>
     <b-row class="club-profile m-0 mb-3" v-if="user.profile">

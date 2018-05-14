@@ -7,7 +7,6 @@
 @import 'button';
 @import './auth/main.scss';
 @import './club/main.scss';
-
 * {
   padding: 0;
   margin: 0;
@@ -20,6 +19,10 @@
   body:not(.modal-open) {
     padding-right: 0px !important;
   }
+}
+
+.decoration-none {
+  text-decoration: none !important;
 }
 
 // fix add club button position when modal open
