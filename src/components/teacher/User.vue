@@ -1,22 +1,35 @@
 <template>
   <div id="teacher_user" class="teacher-user">
+
+    <!-- Popup Add User -->
+    <b-modal size="lg" id="addUser" ref="addUser" title="เพิ่มนักเรียน" hide-footer>
+      <b-form>
+        <b-form-file @change="loadFile" v-model="file" :state="Boolean(file)" placeholder="เลือกไฟล์ excel" accept=".csv, .xls, .xlsx"></b-form-file>
+        <!-- <div v-for="items in uploadData" v-if="uploadData"> -->
+          <b-table small responsive striped :items="uploadData">
+          </b-table>
+        <!-- </div> -->
+      </b-form>
+    </b-modal>
+
     <!-- Button Link Main -->
     <router-link :to=" { name: 'Student_Club'} " class="main-button-link " v-if="user.permission>= 2">
       <i class="fas fa-chevron-circle-left"></i>
       <div class="button-text">หน้าหลัก</div>
     </router-link>
-    <a class="user-button-link" v-if="user.permission >= 2">
-      <i class="fas fa-plus-circle"></i>
-      <div class="button-text">เพิ่มเด็ก</div>
-    </a>
 
-    <b-row class="teacher-user-header m-0 mb-3">
+    <div class="user-button-link" v-if="user.permission >= 2" @click="userAddActive()">
+      <i class="fas fa-plus-circle"></i>
+      <div class="button-text">เพิ่ม</div>
+    </div>
+
+    <!-- <b-row class="teacher-user-header m-0 mb-3">
       <b-col class="club-search mb-2" cols="12" sm="4" md="4" lg="4">
         <b-form @submit.prevent="searchUser(search)">
           <b-form-input v-model="search" type="text" placeholder="ค้นหาชื่อ" :disabled="!user"></b-form-input>
         </b-form>
       </b-col>
-    </b-row>
+    </b-row> -->
     <b-row class="teacher-user-body m-0">
       <b-col>
         <b-table small responsive striped hover :items="userList" :fields="userStruc">
@@ -37,6 +50,7 @@
 </template>
 
 <script>
+import XLSX from "xlsx";
 import { mapGetters, mapActions } from "vuex";
 import swal from "sweetalert2";
 export default {
@@ -48,6 +62,8 @@ export default {
 
   data() {
     return {
+      uploadData: null,
+      file: null,
       user: this.getUser(),
       userList: this.getUserList(),
       userStruc: [
@@ -69,6 +85,30 @@ export default {
   methods: {
     ...mapGetters(["getUser", "getUserList"]),
     ...mapActions(["userRemove", "reqAllUser"]),
+
+    loadFile(files) {
+      var _this = this;
+      var file = files.target.files[0];
+      var reader = new FileReader();
+
+      reader.onload = function() {
+        var fileData = reader.result;
+        var wb = XLSX.read(fileData, {type : 'binary'});
+
+        wb.SheetNames.forEach(function(sheetName){
+          var rowObj = XLSX.utils.sheet_to_row_object_array(wb.Sheets[sheetName]);
+          _this.uploadData = rowObj
+        })
+      }
+      reader.readAsBinaryString(file);
+    },
+
+    // show modal
+    userAddActive() {
+      this.$refs.addUser.show();
+    },
+
+    // club remove active
     userRemoveAction(data) {
       swal({
         type: "warning",
@@ -103,10 +143,11 @@ export default {
                   token: this.user.token
                 })
                   .then(response => {
-                    reqAllUser();
-                    swal({
-                      type: "success",
-                      title: "ลบนักเรียนเสร็จสิ้น"
+                    this.reqAllUser(this.user.token).then(response => {
+                      swal({
+                        type: "success",
+                        title: "ลบนักเรียนเสร็จสิ้น"
+                      });
                     });
                   })
                   .catch(err => {

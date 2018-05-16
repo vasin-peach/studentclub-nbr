@@ -30,7 +30,8 @@
 body.modal-open {
   .club-button-add,
   .user-button-link,
-  .panel-button-link {
+  .panel-button-link,
+  .user-button-link {
     margin-right: 17px !important;
     @include small {
       margin-right: 0px !important;
