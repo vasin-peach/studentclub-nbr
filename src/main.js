@@ -7,8 +7,12 @@ import VeeValidate from 'vee-validate';
 import router from './router';
 import store from './store';
 
-Vue.use(VeeValidate);
+// Vue.use(VeeValidate);
+Vue.use(VeeValidate, {
+  fieldsBagName: 'veeFields'
+});
 Vue.use(BootstrapVue);
+
 
 // Import Assets
 import '@scss/app.scss';
@@ -22,6 +26,8 @@ new Vue({
   el: '#app',
   router,
   store,
-  components: { App },
+  components: {
+    App
+  },
   template: '<App/>'
 });

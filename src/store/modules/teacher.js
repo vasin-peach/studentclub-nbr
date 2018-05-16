@@ -125,6 +125,40 @@ const actions = {
           return reject(err);
         });
     });
+  },
+  // Remove User by StudentID
+  userRemove({
+    commit
+  }, data) {
+    return new Promise((resolve, reject) => {
+      // loading
+      commit('fullLoadingChange', true);
+      // create header
+      var config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': data.token
+        },
+        timeout: 0
+      };
+
+      //create request
+      axios
+        .post(
+          window.location.protocol + '//' + window.location.host.split(':')[0] + ':3000/api/teacher/user/remove', {
+            data
+          }, config
+        )
+        .then(response => {
+          // disable loading
+          commit('fullLoadingChange', false);
+          return resolve(response);
+        })
+        .catch(err => {
+          commit('fullLoadingChange', false);
+          return reject(err);
+        });
+    })
   }
 }
 

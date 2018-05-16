@@ -77,3 +77,23 @@
     right: 133px;
   }
 }
+
+.button {
+  cursor: pointer;
+  border-radius: 7px;
+  padding: 1px 10px;
+  transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
+  &.danger {
+    color: $color-white;
+    background: $color-red;
+    border: 3px solid rgba($color-white, $alpha: 0.8);
+  }
+  &:hover,
+  :focus {
+    border-color: rgba($color-white, $alpha: 0.6);
+    color: rgba($color-white, $alpha: 0.8)
+  }
+  &:focus {
+    outline: none;
+  }
+}
