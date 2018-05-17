@@ -281,6 +281,7 @@ export default {
                 })
                   .then(response => {
                     this.reqAllUser(this.user.token).then(response => {
+                      this.initUser();
                       swal({
                         type: "success",
                         title: "ลบนักเรียนเสร็จสิ้น"
