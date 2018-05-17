@@ -55,7 +55,9 @@ const mutations = {
 // ACTION //
 const actions = {
   // Get Token Session //
-  session({ commit }) {
+  session({
+    commit
+  }) {
     return new Promise((resolve, reject) => {
       // loading
       commit('fullLoadingChange', true);
@@ -72,9 +74,9 @@ const actions = {
       axios
         .get(
           window.location.protocol +
-            '//' +
-            window.location.host.split(':')[0] +
-            ':3000/api/session',
+          '//' +
+          window.location.host.split(':')[0] +
+          ':3000/api/session',
           '',
           config
         )
@@ -90,7 +92,9 @@ const actions = {
   },
 
   // Check token expired //
-  checkTokenExpired({ commit }, token) {
+  checkTokenExpired({
+    commit
+  }, token) {
     return new Promise((resolve, reject) => {
       //create request config
       var config = {
@@ -105,10 +109,11 @@ const actions = {
       axios
         .post(
           window.location.protocol +
-            '//' +
-            window.location.host.split(':')[0] +
-            ':3000/api/auth/check',
-          { token: token },
+          '//' +
+          window.location.host.split(':')[0] +
+          ':3000/api/auth/check', {
+            token: token
+          },
           config
         )
         .then(response => {
@@ -121,16 +126,18 @@ const actions = {
   },
 
   // User Login //
-  login({ commit }, data) {
+  login({
+    commit
+  }, data) {
     commit('fullLoadingChange', true);
 
     //create request
     axios
       .post(
         window.location.protocol +
-          '//' +
-          window.location.host.split(':')[0] +
-          ':3000/api/auth/token',
+        '//' +
+        window.location.host.split(':')[0] +
+        ':3000/api/auth/token',
         data,
         config
       )
@@ -146,7 +153,9 @@ const actions = {
         }
         commit('updateUserState', response.data.token);
         commit('fullLoadingChange', false);
-        router.push({ name: 'Student_Club' });
+        router.push({
+          name: 'Student_Club'
+        });
         return;
       })
 
@@ -156,6 +165,8 @@ const actions = {
 
         // user not found
         if (payload.message == 'Authentication failed. User not found.') {
+
+          commit('fullLoadingChange', false);
           //aelrt
           swal({
             type: 'error',
@@ -169,6 +180,7 @@ const actions = {
           payload.message == 'Authentication failed. Wrong password.'
         ) {
           // alert
+          commit('fullLoadingChange', false);
           swal({
             type: 'error',
             title: 'Authentication',
@@ -180,26 +192,32 @@ const actions = {
       });
   },
   // Logout //
-  logout({ commit }) {
+  logout({
+    commit
+  }) {
     //create request
     commit('updateUserState', null);
     axios
       .post(
         window.location.protocol +
-          '//' +
-          window.location.host.split(':')[0] +
-          ':3000/api/auth/logout',
+        '//' +
+        window.location.host.split(':')[0] +
+        ':3000/api/auth/logout',
         '',
         config
       )
       // login success
       .then(response => {
-        router.push({ name: 'Login' });
+        router.push({
+          name: 'Login'
+        });
       });
   },
 
   // -- Update user -- //
-  userUpdate({ commit }, payload) {
+  userUpdate({
+    commit
+  }, payload) {
     var token = this.getters.getUser.token;
     if (payload && token) {
       return new Promise((resolve, reject) => {
@@ -219,10 +237,11 @@ const actions = {
         axios
           .post(
             window.location.protocol +
-              '//' +
-              window.location.host.split(':')[0] +
-              ':3000/api/auth/update',
-            { payload: payload },
+            '//' +
+            window.location.host.split(':')[0] +
+            ':3000/api/auth/update', {
+              payload: payload
+            },
             config
           )
           .then(response => {
@@ -239,7 +258,9 @@ const actions = {
   },
 
   // -- Get self profile -- //
-  userSelf({ commit }, token) {
+  userSelf({
+    commit
+  }, token) {
     return new Promise((resolve, reject) => {
       // check token exist
       if (!token) return reject();
@@ -258,9 +279,9 @@ const actions = {
       axios
         .post(
           window.location.protocol +
-            '//' +
-            window.location.host.split(':')[0] +
-            ':3000/api/auth/self',
+          '//' +
+          window.location.host.split(':')[0] +
+          ':3000/api/auth/self',
           null,
           config
         )

@@ -25,7 +25,7 @@
       <div class="button-text">เพิ่ม</div>
     </div>
 
-    <b-row class="teacher-user-head m-0 mb-3">
+    <b-row class="teacher-user-head m-0">
       <b-col>
         <b-form>
           <b-form-input name="filter-search" v-model="search" placeholder="ค้นหาโดยชื่อ" :disabled="!userList"></b-form-input>
@@ -46,6 +46,12 @@
       </b-col>
     </b-row>
 
+    <b-row class="teacher-user-title m-0 mb-3">
+      <b-col class="flex-right">
+        <div class="button danger text-center" style="width: 50px" :class="{'disabled': !check.includes(true)}" @click="userRemoveActive()">ลบ</div>
+      </b-col>
+    </b-row>
+
     <transition name="app-fade" mode="out-in">
       <b-row class="teacher-user-body m-0" v-if="!loading">
         <b-col>
@@ -54,7 +60,7 @@
           </div>
           <b-table small responsive striped hover :items="userListShow" :fields="userStruc" v-else>
             <template slot="check" slot-scope="data">
-              <b-form-checkbox style="position: relative; left: 40%; top: 4px; tranform: translateX: -50%;"></b-form-checkbox>
+              <b-form-checkbox v-model="check[data.index]" style="position: relative; left: 40%; top: 4px; tranform: translateX: -50%;"></b-form-checkbox>
             </template>
             <template slot="name" slot-scope="data">
               {{ data.item.prefix }}{{ data.item.firstname}} {{ data.item.lastname}}
@@ -139,6 +145,7 @@ export default {
 
   data() {
     return {
+      check: [{ 0: false }],
       start: 0,
       end: 30,
       currentPage: 1,
@@ -236,14 +243,17 @@ export default {
     },
 
     // club remove active
-    userRemoveAction(data) {
+    userRemoveActive() {
+      // create user list by index
+      var data = [];
+      Object.keys(this.check).forEach(item => {
+        data.push(this.userList[item].studentId);
+      });
+
       swal({
         type: "warning",
         title: "ยืนยันการลบนักเรียน",
-        html:
-          'ต้องการลบนักเรียนรหัส <b class="font-bold">' +
-          data.studentId +
-          "</b> ใช่หรือไม่?",
+        text: "ต้องการลบนักเรียนที่เลือก ใช่หรือไม่?",
         showCancelButton: true,
         confirmButtonColor: "#d33",
         cancelButtonColor: "#3085d6",
@@ -266,7 +276,7 @@ export default {
                 swal.showValidationError("รหัสผ่านไม่ถูกต้อง");
               } else {
                 this.userRemove({
-                  studentId: data.studentId,
+                  data: data,
                   token: this.user.token
                 })
                   .then(response => {
