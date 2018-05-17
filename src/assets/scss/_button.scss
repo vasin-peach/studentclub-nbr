@@ -89,7 +89,7 @@ a {
   transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
   &.danger {
     color: $color-white;
-    background: $color-red;
+    background: $color-danger;
     border: 3px solid rgba($color-white, $alpha: 0.8);
   }
   &:hover,

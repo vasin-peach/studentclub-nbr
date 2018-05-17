@@ -1,18 +1,13 @@
 .header-container {
   // Head
   .header {
-    background: linear-gradient(
-      10deg,
-      rgba($color-red, $alpha: 0.9) 65%,
-      rgba($color-red, $alpha: 0.8) 30%
-    );
+    background: linear-gradient( 10deg, rgba($color-red, $alpha: 0.9) 65%, rgba($color-red, $alpha: 0.8) 30%);
     margin-bottom: 15px;
     padding: 0 15px;
     .col {
       @include center;
       padding-top: 10px;
       padding-bottom: 10px;
-
       .brand {
         img {
           width: 40px;
@@ -21,4 +16,9 @@
       }
     }
   }
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
 }

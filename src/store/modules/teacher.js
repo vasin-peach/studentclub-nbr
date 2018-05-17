@@ -17,6 +17,7 @@ var config = {
 
 // initial state
 const state = {
+  userSize: 0,
   userList: null,
   clubList: null
 };
@@ -24,6 +25,7 @@ const state = {
 // getters
 const getters = {
   getUserList: state => state.userList,
+  getUserSize: state => state.userSize,
   getClubList: state => state.clubList,
 };
 
@@ -31,8 +33,10 @@ const getters = {
 const mutations = {
   updateUserList(state, data) {
     if (data) {
-      state.userList = data;
+      state.userSize = data.count;
+      state.userList = data.users;
     } else {
+      state.userSize = 0;
       state.userList = null;
     }
   },
@@ -75,7 +79,7 @@ const actions = {
         )
         .then(response => {
           // update all userlist in local
-          commit('updateUserList', response.data.users);
+          commit('updateUserList', response.data);
 
           // disable loading
           commit('fullLoadingChange', false);
@@ -158,6 +162,42 @@ const actions = {
           commit('fullLoadingChange', false);
           return reject(err);
         });
+    })
+  },
+
+  userAdd({
+    commit
+  }, data) {
+    return new Promise((resolve, reject) => {
+      // loading
+      commit('fullLoadingChange', true);
+
+      // create header
+      var config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': data.token
+        },
+        timeout: 0
+      };
+
+      //create request
+      axios
+        .post(
+          window.location.protocol + '//' + window.location.host.split(':')[0] + ':3000/api/teacher/user/add', {
+            data
+          }, config
+        )
+        .then(response => {
+          // disable loading
+          commit('fullLoadingChange', false);
+          return resolve(response);
+        })
+        .catch(err => {
+          commit('fullLoadingChange', false);
+          return reject(err);
+        });
+
     })
   }
 }
