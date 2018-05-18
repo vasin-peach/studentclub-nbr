@@ -180,17 +180,16 @@ export default {
 
     // check all
     checkAll() {
-      if (this.unCheck == 1) {
-        Object.keys(this.userListShow).forEach(item => {
-          this.$set(this.check, item, false);
-          this.unCheck = 0;
-        });
-      } else {
-        Object.keys(this.userListShow).forEach(item => {
-          this.$set(this.check, item, true);
-          this.unCheck = 1;
-        });
-      }
+      // if (this.unCheck == 1) {
+      Object.keys(this.userListShow).forEach(key => {
+        this.$set(this.check, key, this.userListShow[key].studentId);
+      });
+      // } else {
+      // Object.keys(this.userListShow).forEach(item => {
+      //   this.$set(this.check, item, true);
+      //   this.unCheck = 1;
+      // });
+      // }
     },
 
     // Init User
