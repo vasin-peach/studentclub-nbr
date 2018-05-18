@@ -46,11 +46,65 @@ const mutations = {
     } else {
       state.clubList = null;
     }
+  },
+  updateClubUser(state, data) {
+    Object.keys(state.clubList).forEach(key => {
+      state.clubList[key].student = data.filter(filter => {
+        return state.clubList[key].name == filter.club
+      })
+    })
   }
 };
 
 // actions
 const actions = {
+
+  // Find User By Club
+  findUserByClub({
+    commit
+  }, data) {
+    return new Promise((resolve, reject) => {
+
+      // create header
+      var config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': data.token
+        },
+        timeout: 0
+      };
+
+      var payload = {
+        data: [],
+        token: data.token
+      }
+
+      data.data.forEach((item, count) => {
+        payload.data[count] = item.name;
+      })
+
+
+      //create request
+      axios
+        .post(
+          window.location.protocol + '//' + window.location.host.split(':')[0] + ':3000/api/teacher/user/club',
+          payload, config
+        )
+        .then(response => {
+          // update all userlist in local
+          commit('updateClubUser', response.data.data);
+
+          // disable loading
+          commit('fullLoadingChange', false);
+          return resolve(response);
+        })
+        .catch(err => {
+          commit('fullLoadingChange', false);
+          return reject(err);
+        });
+
+    })
+  },
 
   // Request All User
   reqAllUser({
@@ -94,7 +148,8 @@ const actions = {
 
   // Request All Club
   reqAllClub({
-    commit
+    commit,
+    dispatch
   }, token) {
     return new Promise((resolve, reject) => {
       // loading
@@ -119,10 +174,16 @@ const actions = {
         .then(response => {
           // update all clublist in local
           commit('updateClubList', response.data.clubs);
-
-          // disable loading
-          commit('fullLoadingChange', false);
-          return resolve(response);
+          dispatch('findUserByClub', {
+            token: token,
+            data: response.data.clubs
+          }).then(response => {
+            return resolve(response);
+            commit('fullLoadingChange', false);
+          }).catch(err => {
+            commit('fullLoadingChange', false);
+            return reject(err);
+          })
         })
         .catch(err => {
           commit('fullLoadingChange', false);
@@ -130,6 +191,8 @@ const actions = {
         });
     });
   },
+
+
   // Remove User by StudentID
   userRemove({
     commit
@@ -165,6 +228,7 @@ const actions = {
     })
   },
 
+  // Add User
   userAdd({
     commit
   }, data) {
