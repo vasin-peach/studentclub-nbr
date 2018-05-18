@@ -6346,6 +6346,10 @@ pretty@2.0.0:
     extend-shallow "^2.0.1"
     js-beautify "^1.6.12"
 
+print-js@^1.0.42:
+  version "1.0.42"
+  resolved "https://registry.yarnpkg.com/print-js/-/print-js-1.0.42.tgz#0f3d20913dfebce13b5d3ac02c4cb1c109ba1984"
+
 printj@~1.1.0, printj@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/printj/-/printj-1.1.2.tgz#d90deb2975a8b9f600fb3a1c94e3f4c53c78a222"
