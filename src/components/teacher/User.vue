@@ -300,7 +300,8 @@ export default {
                       this.initUser();
                       swal({
                         type: "success",
-                        title: "ลบนักเรียนเสร็จสิ้น"
+                        title: "ลบนักเรียนเสร็จสิ้น",
+                        text: "นักเรียนที่เลือกได้ถูกลบแล้ว"
                       });
                     });
                   })
