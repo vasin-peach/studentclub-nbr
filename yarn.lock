@@ -6995,10 +6995,6 @@ schema-utils@^0.4.0, schema-utils@^0.4.5:
     ajv "^6.1.0"
     ajv-keywords "^3.1.0"
 
-scroll-syncer@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/scroll-syncer/-/scroll-syncer-1.2.1.tgz#8a910d265d3f135a16246058edeaac2ea8b4a927"
-
 scss-tokenizer@^0.2.3:
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/scss-tokenizer/-/scss-tokenizer-0.2.3.tgz#8eb06db9a9723333824d3f5530641149847ce5d1"
@@ -8058,12 +8054,6 @@ vue-style-loader@^3.0.0, vue-style-loader@^3.0.1:
   dependencies:
     hash-sum "^1.0.2"
     loader-utils "^1.0.2"
-
-vue-table@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/vue-table/-/vue-table-0.2.2.tgz#aacdf0658c617c1e83426b4825ab6b80a4d8a4f2"
-  dependencies:
-    scroll-syncer "^1.2.1"
 
 vue-template-compiler@^2.5.2:
   version "2.5.16"

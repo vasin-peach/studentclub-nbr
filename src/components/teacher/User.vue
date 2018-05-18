@@ -63,7 +63,7 @@
           </div>
           <b-table small responsive striped hover :items="userListShow" :fields="userStruc" v-else>
             <template slot="check" slot-scope="data">
-              <b-form-checkbox v-model="check[data.index]" :value="data.item.studentId" style="position: relative; left: 40%; top: 4px; tranform: translateX: -50%;"></b-form-checkbox>
+              <b-form-checkbox v-model="check[data.index]" :value="data.item" style="position: relative; left: 40%; top: 4px; tranform: translateX: -50%;"></b-form-checkbox>
             </template>
             <template slot="name" slot-scope="data">
               {{ data.item.prefix }}{{ data.item.firstname}} {{ data.item.lastname}}
@@ -179,13 +179,12 @@ export default {
 
   methods: {
     ...mapGetters(["getUser", "getUserList"]),
-    ...mapActions(["userRemove", "reqAllUser", "userAdd"]),
-
+    ...mapActions(["userRemove", "reqAllUser", "reqAllClub", "userAdd"]),
     // check all
     checkAll() {
       if (this.unCheck == 0) {
         Object.keys(this.userListShow).forEach(key => {
-          this.$set(this.check, key, this.userListShow[key].studentId);
+          this.$set(this.check, key, this.userListShow[key]);
           this.unCheck = 1;
         });
       } else {
@@ -296,6 +295,7 @@ export default {
                   token: this.user.token
                 })
                   .then(response => {
+                    this.reqAllClub(this.user.token);
                     this.reqAllUser(this.user.token).then(response => {
                       this.initUser();
                       swal({

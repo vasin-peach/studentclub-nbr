@@ -1,5 +1,6 @@
 <template>
   <div id="teacher_club">
+
     <!-- Button Link Main -->
     <router-link :to="{ name: 'Student_Club'}" class="main-button-link" v-if="user.permission >= 2">
       <i class="fas fa-chevron-circle-left"></i>
@@ -31,10 +32,17 @@
                       <b>{{ club.name }}</b>
                     </span>
                   </b-col>
+                  <b-col class="text-right">
+                    <b-form @submit.prevent="printUser(club, index)">
+                      <button class="button info text-right" style="width: 100px" :class="{'disabled': club.student.length == 0}" :disabled="club.student.length == 0">
+                        ปริ้นรายชื่อ
+                      </button>
+                    </b-form>
+                  </b-col>
                 </b-row>
                 <b-row>
                   <b-col>
-                    <b-table responsive striped hover sm :items="club.student" :fields="fields">
+                    <b-table responsive striped hover sm :items="club.student" :fields="fields" :id="'table-' + index">
                       <template slot="name" slot-scope="data">
                         {{ data.item.prefix}}{{ data.item.firstname}} {{ data.item.lastname}}
                       </template>
@@ -56,6 +64,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import XLSX from "xlsx";
 export default {
   name: "Teacher_Club",
 
@@ -81,7 +90,37 @@ export default {
   // ------------- //
 
   methods: {
-    ...mapGetters(["getUser", "getClubList"])
+    ...mapGetters(["getUser", "getClubList"]),
+
+    printUser(data, index) {
+      var fields = [
+        [data.name],
+        ["ลำดับ", "รหัสนักเรียน", "ชื่อเต็ม", "ชั้น", "ห้อง"]
+      ];
+      data.student.forEach(item => {
+        fields.push([
+          index,
+          item.studentId,
+          item.prefix + item.firstname + " " + item.lastname,
+          item.education.level,
+          item.education.class
+        ]);
+      });
+
+      const ws = XLSX.utils.aoa_to_sheet(fields);
+      const wb = XLSX.utils.book_new();
+
+      ws["!cols"] = [
+        { wch: 6 },
+        { wch: 10 },
+        { wch: 25 },
+        { wch: 10 },
+        { wch: 6 }
+      ];
+
+      XLSX.utils.book_append_sheet(wb, ws, "SheetJS");
+      XLSX.writeFile(wb, data.name + ".xlsx");
+    }
   }
 };
 </script>
