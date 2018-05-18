@@ -49,7 +49,7 @@
     <b-row class="teacher-user-title m-0 mb-3">
       <b-col class="flex-right">
         <div class="button info text-center mr-2" style="width: 110px" @click="checkAll()">เลือกทั้งหน้า</div>
-        <div class="button danger text-center" style="width: 50px" :class="{'disabled': !check.includes(true)}" @click="userRemoveActive()">ลบ</div>
+        <div class="button danger text-center" style="width: 50px" :class="{'disabled': Object.values(check).filter(item => { return item != false }).length == 0}" @click="userRemoveActive()">ลบ</div>
       </b-col>
     </b-row>
 
@@ -61,7 +61,7 @@
           </div>
           <b-table small responsive striped hover :items="userListShow" :fields="userStruc" v-else>
             <template slot="check" slot-scope="data">
-              <b-form-checkbox v-model="check[data.index]" style="position: relative; left: 40%; top: 4px; tranform: translateX: -50%;"></b-form-checkbox>
+              <b-form-checkbox v-model="check[data.index]" :value="data.item.studentId" style="position: relative; left: 40%; top: 4px; tranform: translateX: -50%;"></b-form-checkbox>
             </template>
             <template slot="name" slot-scope="data">
               {{ data.item.prefix }}{{ data.item.firstname}} {{ data.item.lastname}}
@@ -261,10 +261,7 @@ export default {
     // club remove active
     userRemoveActive() {
       // create user list by index
-      var data = [];
-      Object.keys(this.check).forEach(item => {
-        data.push(this.userList[item].studentId);
-      });
+      var data = this.check;
 
       swal({
         type: "warning",
@@ -306,20 +303,11 @@ export default {
                     });
                   })
                   .catch(err => {
-                    if (err.response.data.message == "user not found.") {
-                      swal({
-                        type: "error",
-                        title: "ไม่สามารถลบได้",
-                        text: "ไม่พบนักเรียนคนนี้ในระบบ กรุณาลองใหม่อีกครั้ง"
-                      });
-                    } else {
-                      swal({
-                        type: "error",
-                        title: "ไม่สามารถลบได้",
-                        text:
-                          "เกิดข้อผิดพลาด กรุณาลองใหม่ หรือติดต่อผู้ดูแลระบบ"
-                      });
-                    }
+                    swal({
+                      type: "error",
+                      title: "ไม่สามารถลบได้",
+                      text: "เกิดข้อผิดพลาด กรุณาลองใหม่ หรือติดต่อผู้ดูแลระบบ"
+                    });
                   });
               }
             }
