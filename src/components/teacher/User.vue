@@ -48,6 +48,7 @@
 
     <b-row class="teacher-user-title m-0 mb-3">
       <b-col class="flex-right">
+        <div class="button info text-center mr-2" style="width: 110px" @click="checkAll()">เลือกทั้งหน้า</div>
         <div class="button danger text-center" style="width: 50px" :class="{'disabled': !check.includes(true)}" @click="userRemoveActive()">ลบ</div>
       </b-col>
     </b-row>
@@ -145,7 +146,7 @@ export default {
 
   data() {
     return {
-      check: [{ 0: false }],
+      check: [false],
       start: 0,
       end: 30,
       currentPage: 1,
@@ -176,6 +177,21 @@ export default {
   methods: {
     ...mapGetters(["getUser", "getUserList"]),
     ...mapActions(["userRemove", "reqAllUser", "userAdd"]),
+
+    // check all
+    checkAll() {
+      if (this.unCheck == 1) {
+        Object.keys(this.userListShow).forEach(item => {
+          this.$set(this.check, item, false);
+          this.unCheck = 0;
+        });
+      } else {
+        Object.keys(this.userListShow).forEach(item => {
+          this.$set(this.check, item, true);
+          this.unCheck = 1;
+        });
+      }
+    },
 
     // Init User
     initUser() {

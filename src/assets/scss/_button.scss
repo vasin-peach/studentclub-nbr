@@ -87,6 +87,11 @@ a {
   border-radius: 7px;
   padding: 1px 10px;
   transition: opacity 0.3s ease, background 0.3s ease, border 0.3s ease, color 0.3s ease;
+  &.info {
+    color: #fff;
+    background: $color-info;
+    border: 3px solid rgba($color-white, $alpha: 0.8)
+  }
   &.danger {
     color: $color-white;
     background: $color-danger;
