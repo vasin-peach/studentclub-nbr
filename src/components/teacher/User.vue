@@ -49,7 +49,9 @@
     <b-row class="teacher-user-title m-0 mb-3">
       <b-col class="flex-right">
         <div class="button info text-center mr-2" style="width: 110px" @click="checkAll()">เลือกทั้งหน้า</div>
-        <div class="button danger text-center" style="width: 50px" :class="{'disabled': Object.values(check).filter(item => { return item != false }).length == 0}" @click="userRemoveActive()">ลบ</div>
+        <b-form @submit.prevent="userRemoveActive()">
+          <button type="submit" class="button danger text-center" style="width: 50px" :disabled="Object.values(check).filter(item => { return item != false }).length == 0" :class="{'disabled': Object.values(check).filter(item => { return item != false }).length == 0}">ลบ</button>
+        </b-form>
       </b-col>
     </b-row>
 
