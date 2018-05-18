@@ -27,7 +27,7 @@
 
     <b-row class="teacher-user-head m-0">
       <b-col>
-        <b-form>
+        <b-form @submit.prevent="searchUser(search)">
           <b-form-input name="filter-search" v-model="search" placeholder="ค้นหาโดยชื่อ" :disabled="!userList"></b-form-input>
         </b-form>
       </b-col>
