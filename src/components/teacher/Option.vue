@@ -1,0 +1,69 @@
+<template>
+  <div class="teacher-option">
+    <b-row class="teacher-option-body m-0">
+      <b-col cols="12" class="text-center">
+        <hr> ปิดเปิดการลงทะเบียนชุมนุมของนักเรียน
+      </b-col>
+      <b-col class="text-center mt-2">
+        <span class="color-danger bold">ปิด</span>
+        <switches v-model="enabled" theme="bootstrap" :color="color"></switches>
+        <span class="color-success bold">เปิด</span>
+        <hr>
+      </b-col>
+    </b-row>
+  </div>
+</template>
+
+<script>
+import Switches from "vue-switches";
+import { mapActions, mapGetters } from "vuex";
+export default {
+  name: "Teacher_Option",
+
+  mounted() {
+    this.webEnabledState().then(response => {
+      this.$set(this, "enabled", response);
+      this.$set(this, "color", response ? "success" : "danger");
+    });
+  },
+
+  // ---------- //
+  // -- DATA -- //
+  // ---------- //
+
+  data() {
+    return {
+      user: this.getUser(),
+      enabled: false,
+      color: "danger"
+    };
+  },
+
+  // ----------- //
+  // -- WATCH -- //
+  // ----------- //
+
+  watch: {
+    enabled: function(value) {
+      this.color = value ? "success" : "danger";
+      this.webEnabled({ token: this.user.token, data: value });
+    }
+  },
+
+  // ------------- //
+  // -- METHODS -- //
+  // ------------- //
+
+  methods: {
+    ...mapGetters(["getUser"]),
+    ...mapActions(["webEnabled", "webEnabledState"])
+  },
+
+  components: {
+    Switches
+  }
+};
+</script>
+
+<style>
+</style>

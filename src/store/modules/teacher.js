@@ -59,6 +59,54 @@ const mutations = {
 // actions
 const actions = {
 
+  webEnabledState({}, data) {
+    return new Promise((resolve, reject) => {
+
+      // create header
+      var config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        timeout: 0
+      };
+
+      // create request
+      axios.get(
+        window.location.protocol + '//' + window.location.host.split(':')[0] + ':3000/api/status/enabled',
+        data, config
+      ).then(response => {
+        return resolve(response.data.data.enabled);
+      }).catch(err => {
+        return reject(err.response);
+      })
+
+    })
+  },
+
+  // Web Enabled Option
+  webEnabled({
+    commit
+  }, data) {
+    return new Promise((resolve, reject) => {
+
+      // create header
+      var config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': data.token
+        },
+        timeout: 0
+      };
+
+      axios.post(
+        window.location.protocol + '//' + window.location.host.split(':')[0] + ':3000/api/teacher/option/enabled',
+        data, config
+      ).then(response => {})
+
+    })
+  },
+
+
   // Find User By Club
   findUserByClub({
     commit

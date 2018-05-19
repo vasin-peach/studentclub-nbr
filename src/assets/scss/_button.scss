@@ -1,7 +1,8 @@
 .club-button-add,
 .user-button-link,
 .panel-button-link,
-.main-button-link {
+.main-button-link,
+.option-button-link {
   @include center;
   cursor: pointer;
   text-decoration: none !important;
@@ -79,6 +80,14 @@ a {
   bottom: 15px;
   @include small {
     right: 133px;
+  }
+}
+
+.option-button-link {
+  right: 212px;
+  bottom: 15px;
+  @include small {
+    right: 196px;
   }
 }
 

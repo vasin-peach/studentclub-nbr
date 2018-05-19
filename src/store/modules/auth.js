@@ -188,6 +188,22 @@ const actions = {
             timer: 3000
           });
           return;
+        } else if (payload.message == 'server refund student to logged in.') {
+          commit('fullLoadingChange', false);
+          swal({
+            type: 'warning',
+            title: 'Authentication',
+            text: 'เว็บยังไม่เปิดให้นักเรียนลงทะเบียนชุมนุม',
+            timer: 3000
+          });
+        } else {
+          commit('fullLoadingChange', false);
+          swal({
+            type: 'error',
+            title: 'Authentication',
+            text: 'เกิดเหตุขัดข้อง กรุณาลองใหม่อีกครั้งภายหลัง',
+            timer: 3000
+          });
         }
       });
   },
@@ -293,6 +309,7 @@ const actions = {
         })
         .catch(err => {
           return reject(err.response);
+          window.location('/logout');
         });
     });
   }

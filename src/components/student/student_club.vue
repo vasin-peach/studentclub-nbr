@@ -3,15 +3,6 @@
     <div class="club-container">
 
       <div class="body">
-        <!-- <b-row class="club-profile m-0 mb-3" v-if="user.profile">
-          <b-col class="text-right">
-            {{ user.profile.prefix }}{{ user.profile.firstname}} {{ user.profile.lastname}} (
-            <span class="font-red" v-if="user.permission >= 2">Teacher Mode </span>
-            <span v-else>{{ user.studentId }}</span>
-            )
-            <router-link :to="{name: 'Logout'}" class="font-danger">ออกจากระบบ</router-link>
-          </b-col>
-        </b-row> -->
         <b-row class="club-header m-0 mb-3">
           <b-col class="club-search mb-2" cols="12" sm="6" md="4" lg="6">
             <b-form @submit.prevent="searchClub(search)">
@@ -202,6 +193,11 @@
           <div class="button-text">ชุมนุม</div>
         </router-link>
 
+        <router-link :to="{ name: 'Teacher_Option'}" class="option-button-link" v-if="user.permission >= 2">
+          <i class="fas fa-cog"></i>
+          <div class="button-text">ตั้งค่า</div>
+        </router-link>
+
         <transition name="app-fade" mode="out-in">
           <transition-group name="club" class="club-block row m-0" tag="div" v-if="!getLoading().half && clubTemp != 'notfound' && clubTemp !='empty'">
             <b-col class="club-item" v-for="(data, count) in clubShow" :key="count" cols="12" sm="6" md="4" lg="3" xl="3">
@@ -267,23 +263,23 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapActions } from 'vuex';
-import { Validator } from 'vee-validate';
-import swal from 'sweetalert2';
+import { mapGetters, mapMutations, mapActions } from "vuex";
+import { Validator } from "vee-validate";
+import swal from "sweetalert2";
 
 const messages = {
   en: {
     messages: {
-      digits: (name, val) => 'กรุณาใส่ตัวตัวเลขให้ครบ ' + val + ' ตัว',
-      numeric: () => 'จำเป็นต้องเป็นตัวเลขเท่านั้น',
-      required: () => 'กรุณากรอกข้อมูล'
+      digits: (name, val) => "กรุณาใส่ตัวตัวเลขให้ครบ " + val + " ตัว",
+      numeric: () => "จำเป็นต้องเป็นตัวเลขเท่านั้น",
+      required: () => "กรุณากรอกข้อมูล"
     }
   }
 };
 Validator.localize(messages);
 
 export default {
-  name: 'student_club',
+  name: "student_club",
 
   // ---------- //
   // -- DATA -- //
@@ -306,16 +302,16 @@ export default {
       entry: null,
       edit: null,
       receiveOptions: [
-        { value: 'both', text: 'ทั้งมัธยมต้นและปลาย' },
-        { value: 'junior', text: 'เฉพาะมัธยมต้น' },
-        { value: 'senior', text: 'เฉพาะมัธยมปลาย' }
+        { value: "both", text: "ทั้งมัธยมต้นและปลาย" },
+        { value: "junior", text: "เฉพาะมัธยมต้น" },
+        { value: "senior", text: "เฉพาะมัธยมปลาย" }
       ],
       clubOwnerNum: 1,
       clubSubmit: {
         prefix: {},
         firstname: {},
         lastname: {},
-        receive: 'both'
+        receive: "both"
       }
     };
   },
@@ -330,8 +326,8 @@ export default {
         this.initClub();
       })
       .catch(err => {
-        this.clubData = 'empty';
-        this.clubTemp = 'empty';
+        this.clubData = "empty";
+        this.clubTemp = "empty";
       });
   },
 
@@ -361,10 +357,10 @@ export default {
       if (this.clubTemp) {
         this.clubShow = this.clubTemp.slice(this.start, this.end);
         if (!this.clubTemp.length) {
-          this.clubTemp = 'notfound';
+          this.clubTemp = "notfound";
         }
       } else {
-        this.clubTemp = 'notfound';
+        this.clubTemp = "notfound";
       }
     },
 
@@ -394,15 +390,15 @@ export default {
   // ------------- //
 
   methods: {
-    ...mapGetters(['getClubAll', 'getClubRange', 'getLoading', 'getUser']),
-    ...mapMutations(['halfLoadingChange']),
+    ...mapGetters(["getClubAll", "getClubRange", "getLoading", "getUser"]),
+    ...mapMutations(["halfLoadingChange"]),
     ...mapActions([
-      'userUpdate',
-      'userSelf',
-      'clubUpdateCurrent',
-      'clubGet',
-      'clubRemove',
-      'clubAdd'
+      "userUpdate",
+      "userSelf",
+      "clubUpdateCurrent",
+      "clubGet",
+      "clubRemove",
+      "clubAdd"
     ]),
 
     // init club {
@@ -451,12 +447,12 @@ export default {
             });
             this.$refs.add.hide();
             swal({
-              type: 'success',
-              title: 'เพิ่มชุมนุมเสร็จสิ้น',
+              type: "success",
+              title: "เพิ่มชุมนุมเสร็จสิ้น",
               html:
                 'ชุมนุม <b class="font-bold">' +
                 this.clubSubmit.name +
-                '</b> ได้ถูกเพิ่มแล้ว.',
+                "</b> ได้ถูกเพิ่มแล้ว.",
               timer: 2500
             }).then(() => {
               this.clubOwnerNum = 1;
@@ -464,18 +460,18 @@ export default {
                 prefix: {},
                 firstname: {},
                 lastname: {},
-                receive: 'both'
+                receive: "both"
               };
             });
           })
           .catch(err => {
             swal({
-              type: 'error',
-              title: 'ไม่สามารถเพิ่มชุมนุมได้',
+              type: "error",
+              title: "ไม่สามารถเพิ่มชุมนุมได้",
               html:
                 'ชื่อชุมนุม <b class="font-bold">' +
                 this.clubSubmit.name +
-                '</b> ได้ถูกใช้ไปแล้ว กรุณาลองชื่ออื่น.'
+                "</b> ได้ถูกใช้ไปแล้ว กรุณาลองชื่ออื่น."
             });
             this.clubGet(this.user.token).then(response => {
               this.initClub();
@@ -487,16 +483,16 @@ export default {
     // submit club
     submitClub(data) {
       swal({
-        title: 'ยืนยันการลงทะเบียน',
+        title: "ยืนยันการลงทะเบียน",
         html:
           'นักเรียนต้องการลงทะเบียนชุมนุม <b class="font-bold">' +
           data.name +
-          '</b> ใช่หรือไม่?',
+          "</b> ใช่หรือไม่?",
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'ใช่, ลงทะเบียน',
-        cancelButtonText: 'ไม่, ยกเลิก'
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "ใช่, ลงทะเบียน",
+        cancelButtonText: "ไม่, ยกเลิก"
       }).then(result => {
         // confirm submit club
         if (result.value == true) {
@@ -508,12 +504,12 @@ export default {
             .then(() => {
               this.userUpdate({ club: data.name }).then(() => {
                 swal({
-                  type: 'success',
-                  title: 'ลงทะเบียนเสร็จสิ้น',
+                  type: "success",
+                  title: "ลงทะเบียนเสร็จสิ้น",
                   html:
                     'นักเรียนได้ลงทะเบียนชุมนุม <b class="font-bold">' +
                     data.name +
-                    '</b> แล้ว.',
+                    "</b> แล้ว.",
                   timer: 2500
                 });
                 this.userSelf(this.user.token);
@@ -535,16 +531,16 @@ export default {
     // cancle club
     cancelClub(data) {
       swal({
-        title: 'ยืนยันการออกชุมนุม',
+        title: "ยืนยันการออกชุมนุม",
         html:
           'นักเรียนต้องการออกจากชุมนุม <b class="font-bold">' +
           data.name +
-          '</b> ใช่หรือไม่?',
+          "</b> ใช่หรือไม่?",
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'ใช่, ออกจากชุมนุม',
-        cancelButtonText: 'ไม่, ยกเลิก'
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "ใช่, ออกจากชุมนุม",
+        cancelButtonText: "ไม่, ยกเลิก"
       }).then(result => {
         // confirm submit club
         if (result.value == true) {
@@ -556,12 +552,12 @@ export default {
             .then(() => {
               this.userUpdate({ club: null }).then(() => {
                 swal({
-                  type: 'success',
-                  title: 'ออกจากชุมนุมเสร็จสิ้น',
+                  type: "success",
+                  title: "ออกจากชุมนุมเสร็จสิ้น",
                   html:
                     'นักเรียนได้ออกจากชุมนุม <b class="font-bold">' +
                     data.name +
-                    '</b> แล้ว.',
+                    "</b> แล้ว.",
                   timer: 2500
                 });
                 this.userSelf(this.user.token);
@@ -595,29 +591,29 @@ export default {
       if (select) {
         // filter
         switch (select) {
-          case 'filter_1': // ยังไม่เต็ม
+          case "filter_1": // ยังไม่เต็ม
             this.clubTemp = this.clubData.filter(elm => {
               return elm.entry.current != elm.entry.max;
             });
             break;
-          case 'filter_2': //เต็มแล้ว
+          case "filter_2": //เต็มแล้ว
             this.clubTemp = this.clubData.filter(elm => {
               return elm.entry.current >= elm.entry.max;
             });
             break;
-          case 'filter_3': //ม.ต้น junior
+          case "filter_3": //ม.ต้น junior
             this.clubTemp = this.clubData.filter(elm => {
-              return elm.receive == 'junior';
+              return elm.receive == "junior";
             });
             break;
-          case 'filter_4': //ม.ปลาย senior
+          case "filter_4": //ม.ปลาย senior
             this.clubTemp = this.clubData.filter(elm => {
-              return elm.receive == 'senior';
+              return elm.receive == "senior";
             });
             break;
-          case 'filter_5': //รับทั้งหมด
+          case "filter_5": //รับทั้งหมด
             this.clubTemp = this.clubData.filter(elm => {
-              return elm.receive == 'both';
+              return elm.receive == "both";
             });
             break;
         }
@@ -631,18 +627,18 @@ export default {
       if (select) {
         // sort
         switch (select) {
-          case 'sort_1': // new -> old
+          case "sort_1": // new -> old
             this.clubTemp.sort(this.sort_new_old);
             break;
 
-          case 'sort_2': // old -> new
+          case "sort_2": // old -> new
             this.clubTemp.sort(this.sort_old_new);
             break;
 
-          case 'sort_3': // number
+          case "sort_3": // number
             this.clubTemp.sort(this.sort_entry);
             break;
-          case 'sort_4': // number
+          case "sort_4": // number
             this.clubTemp.sort(this.sort_max);
             break;
         }
@@ -693,32 +689,32 @@ export default {
     // Remove Club
     clubRemoveActive(data) {
       swal({
-        type: 'warning',
-        title: 'ยืนยันการลบชุมนุม',
+        type: "warning",
+        title: "ยืนยันการลบชุมนุม",
         html:
           'ต้องการลบชุมนุม <b class="font-bold">' +
           data.name +
-          '</b> ใช่หรือไม่?',
+          "</b> ใช่หรือไม่?",
         showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'ใช่, ลบ',
-        cancelButtonText: 'ไม่, ยกเลิก'
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "ใช่, ลบ",
+        cancelButtonText: "ไม่, ยกเลิก"
       }).then(result => {
         if (result.value) {
           // password confirm
           swal({
-            type: 'warning',
-            title: 'ยืนยันรหัสผ่าน',
-            text: 'กรุณาใส่รหัสผ่านของคุณ',
-            input: 'password',
+            type: "warning",
+            title: "ยืนยันรหัสผ่าน",
+            text: "กรุณาใส่รหัสผ่านของคุณ",
+            input: "password",
             showCancelButton: true,
-            confirmButtonText: 'ยืนยัน',
+            confirmButtonText: "ยืนยัน",
             showLoaderOnConfirm: true,
             preConfirm: password => {
               // password was wrong
               if (this.user.profile.password != password) {
-                swal.showValidationError('รหัสผ่านไม่ถูกต้อง');
+                swal.showValidationError("รหัสผ่านไม่ถูกต้อง");
               } else {
                 this.clubRemove({
                   name: data.name,
@@ -726,8 +722,8 @@ export default {
                 })
                   .then(response => {
                     swal({
-                      type: 'success',
-                      title: 'ลบชุมนุมเสร็จสิ้น'
+                      type: "success",
+                      title: "ลบชุมนุมเสร็จสิ้น"
                     });
                     this.clubGet(this.user.token).then(response => {
                       this.initClub();
@@ -736,19 +732,19 @@ export default {
                   .catch(err => {
                     if (
                       err.response.data.message ==
-                      'request duplicate data not found in db.'
+                      "request duplicate data not found in db."
                     ) {
                       swal({
-                        type: 'warning',
-                        title: 'ไม่สามารถลบได้',
-                        text: 'ชุมนุมนี้ได้ถูกลบไปแล้วโดยอาจารย์ท่านอื่น.'
+                        type: "warning",
+                        title: "ไม่สามารถลบได้",
+                        text: "ชุมนุมนี้ได้ถูกลบไปแล้วโดยอาจารย์ท่านอื่น."
                       });
                     } else {
                       swal({
-                        type: 'error',
-                        title: 'ไม่สามารถลบได้',
+                        type: "error",
+                        title: "ไม่สามารถลบได้",
                         text:
-                          'ข้อมูลหรือภาพของชุมนุมนี้อาจไม่มีอยู่จริง กรุณาติดต่อผู้ดูแลระบบ.'
+                          "ข้อมูลหรือภาพของชุมนุมนี้อาจไม่มีอยู่จริง กรุณาติดต่อผู้ดูแลระบบ."
                       });
                     }
                     this.clubGet(this.user.token).then(response => {

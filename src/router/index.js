@@ -21,6 +21,8 @@ const Teacher_User = () =>
   import ('@component/teacher/User');
 const Teacher_Club = () =>
   import ('@component/teacher/Club');
+const Teacher_Option = () =>
+  import ('@component/teacher/Option');
 
 // Student route
 const student = () =>
@@ -94,6 +96,11 @@ const router = new Router({
             path: 'club',
             component: Teacher_Club,
             name: 'Teacher_Club'
+          },
+          {
+            path: 'option',
+            component: Teacher_Option,
+            name: 'Teacher_Option'
           }
         ]
       }
