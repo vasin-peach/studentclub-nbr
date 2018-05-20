@@ -10,5 +10,4 @@ RUN yarn
 COPY . ./
 
 RUN yarn build
-RUN cd /dist
-RUN echo */
+RUN echo find ./dist -type f -printf "%f\n"
