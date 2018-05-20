@@ -105,13 +105,6 @@
           </div>
         </b-modal>
 
-        <!-- Popup Edit Club -->
-        <b-modal id="edit" ref="edit" title="แก้ไขชุมนุม" hide-footer>
-          <div v-if="edit">
-            {{ edit }}
-          </div>
-        </b-modal>
-
         <!-- Popup Add Club -->
         <b-modal id="add" ref="add" title="เพิ่มชุมนุม" size="lg" hide-footer v-if="user.profile">
           <b-form @submit.prevent="addClubSubmit" v-if="user.profile.permission >= 2">
@@ -202,9 +195,6 @@
           <transition-group name="club" class="club-block row m-0" tag="div" v-if="!getLoading().half && clubTemp != 'notfound' && clubTemp !='empty'">
             <b-col class="club-item" v-for="(data, count) in clubShow" :key="count" cols="12" sm="6" md="4" lg="3" xl="3">
               <div class="card">
-                <div class="card-button-edit" @click="clubEditActive(data)" v-if="user.permission >= 2">
-                  <i class="fas fa-pen-square"></i>
-                </div>
                 <div class="card-button-remove" @click="clubRemoveActive(data)" v-if="user.permission >= 2">
                   <i class="fas fa-times-circle"></i>
                 </div>
@@ -287,6 +277,11 @@ export default {
 
   data() {
     return {
+      options: [
+        { value: "both", text: "ทั้งมัธยมต้นและปลาย" },
+        { value: "junior", text: "มัธยมต้น" },
+        { value: "senior", text: "มัธยมปลาย" }
+      ],
       user: this.getUser(),
       search: null,
       filter: null,
@@ -300,7 +295,6 @@ export default {
       end: 12,
       timeout: null,
       entry: null,
-      edit: null,
       receiveOptions: [
         { value: "both", text: "ทั้งมัธยมต้นและปลาย" },
         { value: "junior", text: "เฉพาะมัธยมต้น" },
@@ -417,14 +411,6 @@ export default {
       if (data) {
         this.entry = data;
         this.$refs.entry.show();
-      }
-    },
-
-    // edit club
-    clubEditActive(data) {
-      if (data) {
-        this.edit = data;
-        this.$refs.edit.show();
       }
     },
 
