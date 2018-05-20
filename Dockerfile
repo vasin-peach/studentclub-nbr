@@ -11,4 +11,6 @@ COPY . ./
 
 RUN yarn build
 
+COPY ./dist /usr/share/nginx/html
+
 
