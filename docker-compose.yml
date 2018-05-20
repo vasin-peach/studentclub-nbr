@@ -24,12 +24,10 @@ services:
   frontend:
     container_name: frontend
     build: .
-    restart: always
 
   backend:
     container_name: backend
     build: ../studentclub-nbr-backend
-    restart: always
     ports:
       - 3000:3000
 
