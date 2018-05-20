@@ -10,5 +10,3 @@ RUN yarn
 COPY . ./
 
 RUN yarn build
-
-
