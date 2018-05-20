@@ -8,14 +8,14 @@
     </router-link>
 
     <b-row class="teacher-option-body m-0">
-      <b-col cols="12" class="text-center">
-        <hr> ปิดเปิดการลงทะเบียนชุมนุมของนักเรียน
-      </b-col>
       <b-col class="text-center mt-2">
+        <hr>
         <span class="color-danger bold">ปิด</span>
         <switches v-model="enabled" theme="bootstrap" :color="color"></switches>
         <span class="color-success bold">เปิด</span>
-        <hr>
+      </b-col>
+      <b-col cols="12" class="text-center color-danger">
+        ปิดหรือเปิดการลงทะเบียนชุมนุมของนักเรียน <br> เมื่อทำการปิดนักเรียนจะไม่สามารถเข้าสู่ระบบได้ <hr>
       </b-col>
     </b-row>
   </div>
