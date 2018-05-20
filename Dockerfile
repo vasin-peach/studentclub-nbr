@@ -10,4 +10,4 @@ RUN yarn
 COPY . ./
 
 RUN yarn build
-RUN pwd
+RUN echo pwd
