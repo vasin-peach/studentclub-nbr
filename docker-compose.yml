@@ -1,15 +1,9 @@
 version: "3"
 
-networks:
-  studentclub:
-    external: true
-
 services:
 
   nginx:
     image: nginx:1.14-alpine
-    networks:
-      - studentclub
     ports:
       - 80:80
       - 443:443
@@ -22,8 +16,6 @@ services:
   frontend:
     container_name: frontend
     build: .
-    networks:
-      - studentclub
     restart: always
     ports:
       - 80:80
@@ -32,8 +24,6 @@ services:
   backend:
     container_name: backend
     build: ../studentclub-nbr-backend
-    networks:
-      - studentclub
     restart: always
     ports:
       - 3000:3000
@@ -41,8 +31,6 @@ services:
   mongo:
     container_name: mongo
     image: mongo
-    networks:
-      - studentclub
     restart: always
     volumes:
         - ./data:/data/db
