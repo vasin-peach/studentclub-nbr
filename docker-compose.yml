@@ -4,6 +4,8 @@ services:
 
   nginx:
     image: nginx:1.14-alpine
+    networks:
+      - studentclub
     ports:
       - 80:80
       - 443:443
@@ -16,15 +18,18 @@ services:
   app:
     container_name: app
     build: .
+    networks:
+      - studentclub
     restart: always
     ports:
       - 80:80
       - 443:443
-    links: mongo
 
   mongo:
     container_name: mongo
     image: mongo
+    networks:
+      - studentclub
     restart: always
     volumes:
         - ./data:/data/db
