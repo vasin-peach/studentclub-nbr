@@ -1,9 +1,7 @@
 #app-login {
   width: 100vw;
   min-height: 100vh;
-
   @include center;
-
   @include mobile {
     background: url('/static/imgs/bg-768.png');
     background-size: cover;
@@ -19,31 +17,24 @@
     background-size: cover;
     background-position: center;
   }
-
   .wrapper {
     background-color: $color-white;
     border-radius: 10px;
     padding: 30px;
     box-shadow: 0 20px 50px rgba($color-dark, $alpha: 0.5);
     text-align: center;
-
     @include mobile {
       margin: 1.5vh 0;
       padding: 20px;
-      width: 95vw;
-      // min-height: 97vh;
+      width: 95vw; // min-height: 97vh;
     }
-
     @include tablet {
       padding: 25px;
       width: 80vw;
     }
-
     @include desktop {
-      width: 35vw;
-      // min-height: 90vh;
+      width: 35vw; // min-height: 90vh;
     }
-
     .box-header {
       margin-top: 5vh;
       img {
@@ -51,52 +42,42 @@
         box-shadow: 0 0 0 5px rgba($color-red, $alpha: 0.4);
         transition: box-shadow 0.3s ease;
         border-radius: 50%;
-
         &:hover {
           box-shadow: 0 0 0 10px rgba($color-red, $alpha: 0.3);
         }
       }
-
       span {
         display: block;
         color: $color-base-bold;
-
         &:first-of-type {
           font-size: 25px;
           font-weight: bold;
           margin-top: 20px;
         }
-
         &:last-of-type {
           font-size: 15px;
           font-weight: lighter;
         }
       }
     }
-
     .box-body {
       margin-top: 10vh;
       form {
         width: 100%;
-
         .input-group {
           display: flex;
           justify-content: center;
         }
-
         .input-container {
           @include mobile {
             width: 80vw;
           }
-
           @include tablet {
             width: 60vw;
           }
-
           @include desktop {
             width: 25vw;
           }
-
           span {
             display: block;
             text-align: left;
@@ -120,14 +101,12 @@
           padding: 7px 14px;
           border: 2px $color-gray-bold;
           border-style: none none solid none !important;
-
           &:focus {
             outline: none;
           }
         }
       }
     }
-
     .box-footer {
       margin-top: 5vh;
       margin-bottom: 4vh;
@@ -136,12 +115,10 @@
           min-width: 80vw;
           padding: 15px 15px;
         }
-
         @include tablet {
           min-width: 40vw;
           padding: 15px 15px;
         }
-
         @include desktop {
           min-width: 18vw;
           padding: 15px 15px;
@@ -152,8 +129,10 @@
         border: none;
         background-color: $color-white;
         border-radius: 30px;
-        box-shadow: 0 0 15px 0 rgba($color-gray, $alpha: 0.8);
-        transition: color 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 0 15px 0 rgba($color-gray,
+        $alpha: 0.8);
+        transition: color 0.3s ease,
+        box-shadow 0.3s ease;
         i {
           color: $color-red;
           transition: color 0.3s ease;
@@ -162,18 +141,22 @@
           i {
             color: rgba($color-red, $alpha: 0.8);
           }
-          color: rgba($color-base, $alpha: 0.8);
+          color: rgba($color-base,
+          $alpha: 0.8);
           background-color: #fcfcfc;
-          box-shadow: 0 0 10px 1px rgba($color-gray, $alpha: 0.7);
+          box-shadow: 0 0 10px 1px rgba($color-gray,
+          $alpha: 0.7);
         }
         &:focus {
           i {
             color: rgba($color-red, $alpha: 0.7);
           }
-          color: rgba($color-base, $alpha: 0.8);
+          color: rgba($color-base,
+          $alpha: 0.8);
           outline: none;
           background-color: #fcfcfc;
-          box-shadow: 0 0 2px 1px rgba($color-gray, $alpha: 0.4);
+          box-shadow: 0 0 2px 1px rgba($color-gray,
+          $alpha: 0.4);
         }
       }
     }

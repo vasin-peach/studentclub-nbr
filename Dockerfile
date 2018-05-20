@@ -1,13 +1,14 @@
-# Use node 8
-FROM node:8
+FROM node:9-alpine
 
-# Install prerequisites
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 
-# Set the working directory to /app
-WORKDIR /home/node/app
-COPY . ./
-WORKDIR /home/node/app
+COPY package.json /usr/src/app
 
-# Install package and build
-RUN yarn install
-RUN yarn build
+RUN yarn
+
+COPY . /usr/src/app
+
+EXPOSE 80
+
+CMD [ "yarn", "dev"]
