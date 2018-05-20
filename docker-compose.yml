@@ -1,5 +1,9 @@
 version: "3"
 
+networks:
+  studentclub:
+    external: true
+
 services:
 
   nginx:
