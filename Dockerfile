@@ -1,4 +1,4 @@
-FROM node:9-alpine
+FROM node:9-alpine as step01
 
 WORKDIR /home/node/app
 COPY ./package.json /home/node/app
