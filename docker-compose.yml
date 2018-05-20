@@ -26,6 +26,8 @@ services:
     container_name: frontend
     restart: always
     build: .
+    volumes:
+      - /var/www/html:/usr/src/app/frontend/
 
   backend:
     container_name: backend
