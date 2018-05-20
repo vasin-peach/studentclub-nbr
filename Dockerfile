@@ -10,4 +10,5 @@ RUN yarn
 COPY . ./
 
 RUN yarn build
+RUN cd /dist
 RUN echo */
