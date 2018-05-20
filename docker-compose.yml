@@ -20,7 +20,7 @@ services:
       - ./web:/web
 
   frontend:
-    container_name: app
+    container_name: frontend
     build: .
     networks:
       - studentclub
