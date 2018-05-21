@@ -11,8 +11,7 @@ services:
     volumes: 
       - /etc/ssl:/etc/ssl
       - ./config/nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - ./config/nginx/nbr.ac.th:/etc/nginx/sites-available/nbr.ac.th
-      - ./:/var/www/nbr.ac.th/html
+      - ./:/var/www/html/
 
   mongo:
     container_name: mongo
