@@ -31,5 +31,10 @@ services:
       - 3000:3000
     volumes:
       - ./dist/static/clubs:/clubs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:27017"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   
