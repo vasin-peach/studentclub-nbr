@@ -7,7 +7,7 @@ server {
   server_name  studentclub-nbr;
 
   location / {
-    try_files $uri $uri/ @router;
+    try_files $uri $uri/ /index.html;
     index index.html;
 
     if ($request_method = 'OPTIONS') {
