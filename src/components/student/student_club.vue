@@ -200,7 +200,7 @@
                 </div>
                 <div @click="entryClub(data)">
                   <div class="card-img-container">
-                    <b-img-lazy blank-color="#6a011f" class="card-img-top" v-bind:src="'/clubs/' + data.img" />
+                    <b-img-lazy blank-color="#6a011f" class="card-img-top" v-bind:src="'./static/clubs/' + data.img" />
                   </div>
                   <div class="card-body">
                     <h4 class="card-title">{{ data.name }}</h4>
