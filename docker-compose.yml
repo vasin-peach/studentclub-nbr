@@ -29,5 +29,7 @@ services:
     build: ../studentclub-nbr-backend
     ports:
       - 3000:3000
+    volumes:
+      - ./static/clubs:/clubs
 
   
