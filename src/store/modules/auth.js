@@ -66,14 +66,15 @@ const actions = {
       // create request config
       let config = {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
         },
         timeout: 0
       };
 
       //create request
       axios
-        .get('http://localhost:3000/api/session',
+        .get('http://club.nbr.ac.th:3000/api/session',
           '',
           config
         )
