@@ -1,0 +1,2 @@
+webpackJsonp([9],{"3KYm":function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n("Dd8w"),u=n.n(o),c=n("NYxO"),r=(n("YaEn"),{name:"logout",mounted:function(){this.logout()},methods:u()({},Object(c.b)(["logout"]))}),i={render:function(){var t=this.$createElement;return(this._self._c||t)("div",{attrs:{id:"app-logout"}})},staticRenderFns:[]};var l=n("VU/8")(r,i,!1,function(t){n("g1ec")},null,null);e.default=l.exports},g1ec:function(t,e){}});
+//# sourceMappingURL=9.693db874803c91863f77.js.map
