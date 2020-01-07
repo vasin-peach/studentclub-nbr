@@ -1,8 +1,8 @@
-import axios from 'axios';
-import swal from 'sweetalert2';
-import jwtDecode from 'jwt-decode';
-import router from '../../router';
-import store from '../../store';
+import axios from "axios";
+import swal from "sweetalert2";
+import jwtDecode from "jwt-decode";
+import router from "../../router";
+import store from "../../store";
 
 // enable axios set cookie
 axios.defaults.withCredentials = true;
@@ -10,7 +10,7 @@ axios.defaults.withCredentials = true;
 // create request config
 var config = {
   headers: {
-    'Content-Type': 'application/json'
+    "Content-Type": "application/json"
   },
   timeout: 0
 };
@@ -36,7 +36,7 @@ const mutations = {
     if (data) {
       state.club = data;
     } else {
-      state.club = 'empty';
+      state.club = "empty";
     }
   }
 };
@@ -44,17 +44,17 @@ const mutations = {
 // ACTIONS //
 const actions = {
   // -- Get all club -- //
-  clubGet({ commit }, token) {
+  clubGetImage({ commit }, token) {
     return new Promise((resolve, reject) => {
       // loading
-      commit('halfLoadingChange', true);
+      commit("halfLoadingChange", true);
 
       // create request config
       let config = {
         headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Headers': 'x-access-token',
-          'x-access-token': token
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Headers": "x-access-token",
+          "x-access-token": token
         },
         timeout: 0
       };
@@ -62,20 +62,64 @@ const actions = {
       axios
         .post(
           window.location.protocol +
-            '//' +
-            window.location.host.split(':')[0] +
-            ':3000/api/club/get',
-          '',
+            "//" +
+            window.location.host.split(":")[0] +
+            ":3000/api/club/getImage",
+          "",
+          config
+        )
+        .then(response => {
+          console.log(response);
+          // if (response.status == 200) {
+          //   commit("updateClubData", response.data.data);
+          //   resolve(response);
+          //   commit("halfLoadingChange", false);
+          // } else {
+          //   reject();
+          //   commit("halfLoadingChange", false);
+          // }
+        })
+        // token expired
+        .catch(err => {
+          reject(err.response);
+          // router.push({ name: 'Logout' });
+        });
+    });
+  },
+
+  // -- Get all club -- //
+  clubGet({ commit }, token) {
+    return new Promise((resolve, reject) => {
+      // loading
+      commit("halfLoadingChange", true);
+
+      // create request config
+      let config = {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Headers": "x-access-token",
+          "x-access-token": token
+        },
+        timeout: 0
+      };
+
+      axios
+        .post(
+          window.location.protocol +
+            "//" +
+            window.location.host.split(":")[0] +
+            ":3000/api/club/get",
+          "",
           config
         )
         .then(response => {
           if (response.status == 200) {
-            commit('updateClubData', response.data.data);
+            commit("updateClubData", response.data.data);
             resolve(response);
-            commit('halfLoadingChange', false);
+            commit("halfLoadingChange", false);
           } else {
             reject();
-            commit('halfLoadingChange', false);
+            commit("halfLoadingChange", false);
           }
         })
         // token expired
@@ -92,14 +136,14 @@ const actions = {
       // check payload not empty
       if (data.name && data.amount && data.token) {
         // loading
-        commit('halfLoadingChange', true);
+        commit("halfLoadingChange", true);
 
         // create request config
         let config = {
           headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Headers': 'x-access-token',
-            'x-access-token': data.token
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Headers": "x-access-token",
+            "x-access-token": data.token
           },
           timeout: 0
         };
@@ -113,28 +157,28 @@ const actions = {
         axios
           .post(
             window.location.protocol +
-              '//' +
-              window.location.host.split(':')[0] +
-              ':3000/api/club/update/current',
+              "//" +
+              window.location.host.split(":")[0] +
+              ":3000/api/club/update/current",
             payload,
             config
           )
           .then(response => {
             if (response.status == 200) {
               resolve(response);
-              commit('halfLoadingChange', false);
+              commit("halfLoadingChange", false);
             } else {
               reject();
-              commit('halfLoadingChange', false);
+              commit("halfLoadingChange", false);
             }
           })
           // token expired
           .catch(err => {
             swal({
-              type: 'error',
-              title: 'ปฎิเสธการดำเนินการ',
+              type: "error",
+              title: "ปฎิเสธการดำเนินการ",
               text:
-                'มีผู้สมัครชุมนุมแทรก ระหว่างที่คุณกำลังดำเนินการ, กรุณารีเฟรชหน้า'
+                "มีผู้สมัครชุมนุมแทรก ระหว่างที่คุณกำลังดำเนินการ, กรุณารีเฟรชหน้า"
             });
             return reject();
           });
@@ -149,14 +193,14 @@ const actions = {
       if (!data.token) return reject();
 
       // loading on
-      commit('halfLoadingChange', true);
+      commit("halfLoadingChange", true);
 
       // create request config
       let config = {
         headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Headers': 'x-access-token',
-          'x-access-token': data.token
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Headers": "x-access-token",
+          "x-access-token": data.token
         },
         timeout: 0
       };
@@ -170,9 +214,9 @@ const actions = {
       axios
         .post(
           window.location.protocol +
-            '//' +
-            window.location.host.split(':')[0] +
-            ':3000/api/club/remove',
+            "//" +
+            window.location.host.split(":")[0] +
+            ":3000/api/club/remove",
           payload,
           config
         )
@@ -196,14 +240,14 @@ const actions = {
       if (!data.token || !data.data) return reject();
 
       // loading on
-      commit('halfLoadingChange', true);
+      commit("halfLoadingChange", true);
 
       // create request config
       let config = {
         headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Headers': 'x-access-token',
-          'x-access-token': data.token
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Headers": "x-access-token",
+          "x-access-token": data.token
         },
         timeout: 0
       };
@@ -239,19 +283,19 @@ const actions = {
         axios
           .post(
             window.location.protocol +
-              '//' +
-              window.location.host.split(':')[0] +
-              ':3000/api/club/add',
+              "//" +
+              window.location.host.split(":")[0] +
+              ":3000/api/club/add",
             payload,
             config
           )
           .then(response => {
             resolve(response);
-            return commit('halfLoadingChange', false);
+            return commit("halfLoadingChange", false);
           })
           .catch(err => {
             reject(err.response);
-            return commit('halfLoadingChange', false);
+            return commit("halfLoadingChange", false);
           });
       };
     });

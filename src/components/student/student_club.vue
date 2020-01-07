@@ -1,12 +1,16 @@
 <template>
   <div id="app-student-club">
     <div class="club-container">
-
       <div class="body">
         <b-row class="club-header m-0 mb-3">
           <b-col class="club-search mb-2" cols="12" sm="6" md="4" lg="6">
             <b-form @submit.prevent="searchClub(search)">
-              <b-form-input v-model="search" type="text" placeholder="ค้นหา" :disabled="!clubTemp || clubTemp == 'empty'"></b-form-input>
+              <b-form-input
+                v-model="search"
+                type="text"
+                placeholder="ค้นหา"
+                :disabled="!clubTemp || clubTemp == 'empty'"
+              ></b-form-input>
             </b-form>
           </b-col>
           <b-col class="club-filter mb-2" cols="12" sm="3" md="4" lg="3">
@@ -21,7 +25,7 @@
               </b-form-select>
             </b-form>
           </b-col>
-          <b-col class="club-sort mb-2" cols="">
+          <b-col class="club-sort mb-2" cols>
             <b-form @submit.prevent>
               <b-form-select v-model="sort" :disabled="!clubTemp || clubTemp == 'empty'">
                 <option :value="null">-- เรียงตาม --</option>
@@ -37,7 +41,12 @@
         <!-- Popup Entry Club -->
         <b-modal id="entry" ref="entry" hide-footer>
           <div v-if="entry && user">
-            <b-img blank-color="#6a011f" v-bind:src="'/static/clubs/' + entry.img" class="w-100 mb-3" style="object-fit: cover; object-position: center; min-height: 300px" />
+            <b-img
+              blank-color="#6a011f"
+              v-bind:src="'/static/clubs/' + entry.img"
+              class="w-100 mb-3"
+              style="object-fit: cover; object-position: center; min-height: 300px"
+            />
             <b-row class="m-0">
               <b-col>
                 <p class="h2 font-bold">{{ entry.name }}</p>
@@ -45,7 +54,8 @@
             </b-row>
             <b-row class="m-0">
               <b-col>
-                <p>{{ entry.desc || 'ไม่มีคำอธิบาย' }}</p> <hr>
+                <p>{{ entry.desc || 'ไม่มีคำอธิบาย' }}</p>
+                <hr />
               </b-col>
             </b-row>
             <b-row class="m-0">
@@ -62,20 +72,25 @@
                 <span>{{ entry.receive == 'both' ? 'ทั้งหมด' : entry.receive == 'junior' ? 'มัธยมต้น' : entry.receive == 'senior' ? 'มันธยมปลาย' : '' }}</span>
               </b-col>
               <b-col class="mt-1" cols="12">
-                <span class="font-bold">จำนวน: </span>
-                <span :class="{'font-danger': entry.entry.current >= entry.entry.max}">{{ entry.entry.current}} / {{ entry.entry.max }}</span>
+                <span class="font-bold">จำนวน:</span>
+                <span
+                  :class="{'font-danger': entry.entry.current >= entry.entry.max}"
+                >{{ entry.entry.current}} / {{ entry.entry.max }}</span>
                 <i class="fas fa-user fa-1x" v-if="entry.entry.current < entry.entry.max"></i>
-                <i class="fas fa-user-times fa-1x font-danger" v-else></i><hr>
+                <i class="fas fa-user-times fa-1x font-danger" v-else></i>
+                <hr />
               </b-col>
             </b-row>
             <b-row class="m-0 p-3">
               <b-col class="text-center">
-
                 <!-- entry club -->
                 <div v-if="user.profile.club">
-
                   <!-- user have already enter club -->
-                  <b-btn class="bg-red" disabled v-if="user.profile.club && user.profile.club != entry.name">
+                  <b-btn
+                    class="bg-red"
+                    disabled
+                    v-if="user.profile.club && user.profile.club != entry.name"
+                  >
                     นักเรียนได้ลงชุมนุม
                     <b class="font-bold font-white">{{user.profile.club}}</b> ไปแล้ว
                   </b-btn>
@@ -86,7 +101,6 @@
 
                 <!-- not entry club -->
                 <div v-else>
-
                   <!-- level not match -->
                   <div v-if="entry.receive == 'junior' && user.profile.education.level >= 4">
                     <b-btn class="bg-red" disabled>เฉพาะมัธยมต้น</b-btn>
@@ -95,11 +109,18 @@
                     <b-btn class="bg-red" disabled>เฉพาะมัธยมปลาย</b-btn>
                   </div>
                   <div v-else>
-                    <b-btn class="bg-red" @click="submitClub(entry)" v-if="!user.profile.club">ลงทะเบียนชุมนุม</b-btn>
-                    <b-btn class="bg-danger" v-if="user.profile.club == entry.name" @click="cancelClub(entry)">ออกจากชุมนุม</b-btn>
+                    <b-btn
+                      class="bg-red"
+                      @click="submitClub(entry)"
+                      v-if="!user.profile.club"
+                    >ลงทะเบียนชุมนุม</b-btn>
+                    <b-btn
+                      class="bg-danger"
+                      v-if="user.profile.club == entry.name"
+                      @click="cancelClub(entry)"
+                    >ออกจากชุมนุม</b-btn>
                   </div>
                 </div>
-
               </b-col>
             </b-row>
           </div>
@@ -109,20 +130,45 @@
         <b-modal id="add" ref="add" title="เพิ่มชุมนุม" size="lg" hide-footer v-if="user.profile">
           <b-form @submit.prevent="addClubSubmit" v-if="user.profile.permission >= 2">
             <b-form-group name="add_name" label="ชื่อชุมนุม" class="font-bold">
-              <b-form-input v-model="clubSubmit.name" v-validate="'required'" type="text" placeholder="ชื่อชุมนุม" required></b-form-input>
+              <b-form-input
+                v-model="clubSubmit.name"
+                v-validate="'required'"
+                type="text"
+                placeholder="ชื่อชุมนุม"
+                required
+              ></b-form-input>
             </b-form-group>
             <b-form-group label="รายละเอียดชุมนุม" class="font-bold">
-              <b-form-textarea name="add_desc" v-model="clubSubmit.desc" :rows="4" placeholder="รายละเอียดของชุมนุม (กรอกหรือไม่กรอกก็ได้)"></b-form-textarea>
+              <b-form-textarea
+                name="add_desc"
+                v-model="clubSubmit.desc"
+                :rows="4"
+                placeholder="รายละเอียดของชุมนุม (กรอกหรือไม่กรอกก็ได้)"
+              ></b-form-textarea>
             </b-form-group>
             <b-row>
               <b-col>
                 <b-form-group label="จำนวนที่รับ" class="font-bold">
-                  <b-form-input name="add_max" v-validate="'required|numeric'" v-model="clubSubmit.max" type="number" placeholder="จำนวนนักเรียนที่รับ" required></b-form-input>
+                  <b-form-input
+                    name="add_max"
+                    v-validate="'required|numeric'"
+                    v-model="clubSubmit.max"
+                    type="number"
+                    placeholder="จำนวนนักเรียนที่รับ"
+                    required
+                  ></b-form-input>
                 </b-form-group>
               </b-col>
               <b-col>
                 <b-form-group label="ชั้นที่รับ" class="font-bold">
-                  <b-form-select name="add_receive" v-validate="'required'" v-model="clubSubmit.receive" :options="receiveOptions" placholder="ชั้นปีที่รับ" required></b-form-select>
+                  <b-form-select
+                    name="add_receive"
+                    v-validate="'required'"
+                    v-model="clubSubmit.receive"
+                    :options="receiveOptions"
+                    placholder="ชั้นปีที่รับ"
+                    required
+                  ></b-form-select>
                 </b-form-group>
               </b-col>
             </b-row>
@@ -134,34 +180,62 @@
               <span @click="clubOwnerInc(-1)">
                 <i class="fas fa-minus-circle font-danger"></i>
               </span>
-              <hr>
+              <hr />
               <b-row v-for="item in clubOwnerNum" :key="item">
                 <b-col cols="12" sm="3">
                   <b-form-group label="คำนำหน้าชื่อ">
-                    <b-form-input name="add_prefix" v-model="clubSubmit.prefix[item]" v-validate="'required'" placeholder="เช่น นาย นางสาว" required></b-form-input>
+                    <b-form-input
+                      name="add_prefix"
+                      v-model="clubSubmit.prefix[item]"
+                      v-validate="'required'"
+                      placeholder="เช่น นาย นางสาว"
+                      required
+                    ></b-form-input>
                   </b-form-group>
                 </b-col>
                 <b-col>
                   <b-form-group label="ชื่อจริง">
-                    <b-form-input name="add_firstname" v-model="clubSubmit.firstname[item]" v-validate="'required'" placeholder="เช่น สมศักดิ์" required></b-form-input>
+                    <b-form-input
+                      name="add_firstname"
+                      v-model="clubSubmit.firstname[item]"
+                      v-validate="'required'"
+                      placeholder="เช่น สมศักดิ์"
+                      required
+                    ></b-form-input>
                   </b-form-group>
                 </b-col>
                 <b-col cols="12" sm="5">
                   <b-form-group label="นามสกุล">
-                    <b-form-input name="add_lastname" v-model="clubSubmit.lastname[item]" v-validate="'required'" placeholder="เช่น สมใจหมาย" required></b-form-input>
+                    <b-form-input
+                      name="add_lastname"
+                      v-model="clubSubmit.lastname[item]"
+                      v-validate="'required'"
+                      placeholder="เช่น สมใจหมาย"
+                      required
+                    ></b-form-input>
                   </b-form-group>
                 </b-col>
                 <b-col cols="12">
-                  <hr>
+                  <hr />
                 </b-col>
               </b-row>
             </b-form-group>
             <b-form-group>
               <span class="font-bold">รูปชุมนุม</span>
-              <b-form-file name="add_img" v-model="clubSubmit.img" accept=".jpg, .png, .gif" placeholder="เลือกภาพของคุณ..." class="mt-2" required></b-form-file>
-              <span v-show="errors.has('add_img')" class="fa-1x font-danger">{{ errors.first('add_img') }}</span>
+              <b-form-file
+                name="add_img"
+                v-model="clubSubmit.img"
+                accept=".jpg, .png, .gif"
+                placeholder="เลือกภาพของคุณ..."
+                class="mt-2"
+                required
+              ></b-form-file>
+              <span
+                v-show="errors.has('add_img')"
+                class="fa-1x font-danger"
+              >{{ errors.first('add_img') }}</span>
             </b-form-group>
-            <hr>
+            <hr />
             <div class="center">
               <b-btn type="submit" class="font-center bg-red">เพิ่มชุมนุม</b-btn>
             </div>
@@ -175,49 +249,88 @@
         </div>
 
         <!-- Button Link User -->
-        <router-link :to="{ name: 'Teacher_User'}" class="user-button-link" v-if="user.permission >= 2">
+        <router-link
+          :to="{ name: 'Teacher_User'}"
+          class="user-button-link"
+          v-if="user.permission >= 2"
+        >
           <i class="fas fa-user-circle"></i>
           <div class="button-text">นักเรียน</div>
         </router-link>
 
         <!-- Button Link Panel -->
-        <router-link :to="{ name: 'Teacher_Club'}" class="panel-button-link" v-if="user.permission >= 2">
+        <router-link
+          :to="{ name: 'Teacher_Club'}"
+          class="panel-button-link"
+          v-if="user.permission >= 2"
+        >
           <i class="fas fa-globe"></i>
           <div class="button-text">ชุมนุม</div>
         </router-link>
 
-        <router-link :to="{ name: 'Teacher_Option'}" class="option-button-link" v-if="user.permission >= 2">
+        <router-link
+          :to="{ name: 'Teacher_Option'}"
+          class="option-button-link"
+          v-if="user.permission >= 2"
+        >
           <i class="fas fa-cog"></i>
           <div class="button-text">ตั้งค่า</div>
         </router-link>
 
         <transition name="app-fade" mode="out-in">
-          <transition-group name="club" class="club-block row m-0" tag="div" v-if="!getLoading().half && clubTemp != 'notfound' && clubTemp !='empty'">
-            <b-col class="club-item" v-for="(data, count) in clubShow" :key="count" cols="12" sm="6" md="4" lg="3" xl="3">
+          <transition-group
+            name="club"
+            class="club-block row m-0"
+            tag="div"
+            v-if="!getLoading().half && clubTemp != 'notfound' && clubTemp !='empty'"
+          >
+            <b-col
+              class="club-item"
+              v-for="(data, count) in clubShow"
+              :key="count"
+              cols="12"
+              sm="6"
+              md="4"
+              lg="3"
+              xl="3"
+            >
               <div class="card">
-                <div class="card-button-remove" @click="clubRemoveActive(data)" v-if="user.permission >= 2">
+                <div
+                  class="card-button-remove"
+                  @click="clubRemoveActive(data)"
+                  v-if="user.permission >= 2"
+                >
                   <i class="fas fa-times-circle"></i>
                 </div>
                 <div @click="entryClub(data)">
                   <div class="card-img-container">
-                    <b-img-lazy blank-color="#6a011f" class="card-img-top" v-bind:src="'/static/clubs/' + data.img" />
+                    <b-img-lazy
+                      blank-color="#6a011f"
+                      class="card-img-top"
+                      v-bind:src="'/static/clubs/' + data.img"
+                    />
                   </div>
                   <div class="card-body">
                     <h4 class="card-title">{{ data.name }}</h4>
-                    <p class="card-text">
-                      {{ data.desc || ' ไม่มีคำอธิบาย. '}}
-                    </p>
+                    <p class="card-text">{{ data.desc || ' ไม่มีคำอธิบาย. '}}</p>
                   </div>
                   <div class="card-footer">
                     <b-row class="m-0">
                       <b-col class="p-0" cols="12" sm="12" md="12">
                         ระดับชั้น:
-                        <span class="font-light">{{ data.receive == 'both' ? 'ทั้งหมด' : data.receive == 'junior' ? 'มัธยมต้น' : data.receive == 'senior' ? 'มันธยมปลาย' : '' }}</span>
+                        <span
+                          class="font-light"
+                        >{{ data.receive == 'both' ? 'ทั้งหมด' : data.receive == 'junior' ? 'มัธยมต้น' : data.receive == 'senior' ? 'มันธยมปลาย' : '' }}</span>
                       </b-col>
                       <b-col class="p-0 mt-1" cols="12">
-                        <i class="fas fa-user fa-1x font-red" v-if="data.entry.current < data.entry.max"></i>
+                        <i
+                          class="fas fa-user fa-1x font-red"
+                          v-if="data.entry.current < data.entry.max"
+                        ></i>
                         <i class="fas fa-user-times fa-1x font-danger" v-else></i>
-                        <span :class="{'font-danger': data.entry.current >= data.entry.max}">{{ data.entry.current}} / {{ data.entry.max }}</span>
+                        <span
+                          :class="{'font-danger': data.entry.current >= data.entry.max}"
+                        >{{ data.entry.current}} / {{ data.entry.max }}</span>
                       </b-col>
                     </b-row>
                   </div>
@@ -229,11 +342,13 @@
           <div class="loading-half-wrapper" v-else>
             <div class="loading-half-fade">
               <div v-if="clubTemp == 'notfound' || clubTemp == 'empty'" class="text-center">
-                <i class="fas fa-exclamation-circle fa-3x mb-1"></i> <br> ไม่พบข้อมูล
+                <i class="fas fa-exclamation-circle fa-3x mb-1"></i>
+                <br />ไม่พบข้อมูล
               </div>
               <div class="loading-half-block" v-else>
                 <div class="text-center">
-                  <i class="fas fa-spinner fa-spin fa-3x"></i><br>
+                  <i class="fas fa-spinner fa-spin fa-3x"></i>
+                  <br />
                 </div>
               </div>
             </div>
@@ -242,8 +357,13 @@
         <div class="footer">
           <b-row class="m-0">
             <b-col v-if="clubShow">
-              <b-pagination size="md" :total-rows="clubTemp.length" v-model="currentPage" :per-page="12" :disabled="!clubTemp || clubTemp == 'empty'">
-              </b-pagination>
+              <b-pagination
+                size="md"
+                :total-rows="clubTemp.length"
+                v-model="currentPage"
+                :per-page="12"
+                :disabled="!clubTemp || clubTemp == 'empty'"
+              ></b-pagination>
             </b-col>
           </b-row>
         </div>
@@ -315,6 +435,7 @@ export default {
   // ------------- //
 
   created() {
+    console.log("hi");
     this.clubGet(this.user.token)
       .then(result => {
         this.initClub();
@@ -391,6 +512,7 @@ export default {
       "userSelf",
       "clubUpdateCurrent",
       "clubGet",
+      "clubGetImage",
       "clubRemove",
       "clubAdd"
     ]),
