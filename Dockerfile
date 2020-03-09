@@ -1,14 +1,13 @@
-FROM node:9-alpine
+FROM node:9-alpine as step01
 
-RUN mkdir -p /usr/src/app/frontend
-WORKDIR /usr/src/app/frontend
+WORKDIR /home/node/app
+COPY ./package.json /home/node/app
+RUN yarn install
 
-COPY package.json /usr/src/app/frontend
+COPY . /home/node/app
+RUN yarn build
 
-RUN yarn
+FROM nginx:1.14-alpine
+WORKDIR /usr/share/nginx/html
 
-COPY . /usr/src/app
-
-EXPOSE 80
-
-CMD [ "yarn", "dev"]
+COPY --from=step01 /home/node/app/dist .

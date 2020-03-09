@@ -9,6 +9,7 @@ axios.defaults.withCredentials = true;
 // create request config
 var config = {
   headers: {
+    'Access-Control-Allow-Origin': '*',
     'Content-Type': 'application/json'
   },
   timeout: 0
@@ -65,18 +66,15 @@ const actions = {
       // create request config
       let config = {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
         },
         timeout: 0
       };
 
       //create request
       axios
-        .get(
-          window.location.protocol +
-          '//' +
-          window.location.host.split(':')[0] +
-          ':3000/api/session',
+        .get('http://localhost:3000/api/session',
           '',
           config
         )

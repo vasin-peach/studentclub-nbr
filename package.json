@@ -2,7 +2,7 @@
   "name": "studentclub-nbr",
   "version": "1.0.0",
   "description": "Online Club Registration System Of Nawaminthrachinuthit Benjam Rajalai School",
-  "author": "Peaches",
+  "author": "Vasin Sermsampan <Shinasaki07@gmail.com>",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
